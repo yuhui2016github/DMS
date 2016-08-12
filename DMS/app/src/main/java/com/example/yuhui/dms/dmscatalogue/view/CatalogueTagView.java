@@ -1,0 +1,78 @@
+package com.example.yuhui.dms.dmscatalogue.view;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.text.TextPaint;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
+import android.widget.ImageView;
+
+/**
+ * Created by Administrator on 2016-5-31.
+ */
+public class CatalogueTagView extends ImageView {
+    private static final int ROTATE_DEGREES = 45;
+    private String text = "text";
+    private Path mPath;
+    private Paint mPaint;
+    private TextPaint mTextPaint;
+    private float mLength1;
+    private float mLength2;
+
+    public CatalogueTagView(Context context) {
+        this(context, null);
+    }
+
+    public CatalogueTagView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        DisplayMetrics metric = new DisplayMetrics();
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metric);
+
+        mLength1 = (float) (metric.widthPixels / 3 * 0.1);
+        mLength2 = (float) (metric.widthPixels / 3 * 0.3);
+
+
+        mPaint = new Paint();
+        mPaint.setColor(0xffaaadb3);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setAntiAlias(true);
+        //多边形
+        mPath = new Path();
+        mPath.moveTo(0, 0);
+        mPath.lineTo(mLength2, mLength2);
+        mPath.lineTo(mLength2, 0);
+        mPath.lineTo(0, 0);
+
+
+        final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
+        float spPxSzie = 10 * fontScale + 0.5f;
+        int TEXT_SIZE = Math.round(spPxSzie);
+        mTextPaint = new TextPaint();
+        mTextPaint.setAntiAlias(true);
+        mTextPaint.setTextAlign(Paint.Align.LEFT);
+        mTextPaint.setColor(Color.WHITE);
+        mTextPaint.setTextSize(TEXT_SIZE);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        canvas.drawPath(mPath, mPaint);
+        canvas.rotate(ROTATE_DEGREES);
+        canvas.drawText(text, (mLength2 - mLength1) / 1.5f, -mLength1 / 2.2f, mTextPaint);
+    }
+
+    public void setText(String str) {
+        this.text = str;
+        invalidate();
+    }
+}
