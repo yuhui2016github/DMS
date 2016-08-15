@@ -1,6 +1,7 @@
 package com.example.yuhui.dms.dmscatalogue.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,9 +51,21 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
     }
 
     private void setCheckBoxEvent(final CommdityBrowsingViewHolder holder, final int position) {
+        Drawable drawable;
+        if (position % 3 == 0) {
+            drawable = context.getResources()
+                    .getDrawable(R.drawable.catalogue_shopping_bus_press);
+        } else {
+            drawable = context.getResources()
+                    .getDrawable(R.drawable.catalogue_shopping_bus);
+        }
+        holder.mShoppingCheckBox
+                .setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+
         holder.mShoppingCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 这一步必须要做,否则不会显示.
                 new ShoppingFormInputDialog.Builder(context).setData(7).show();
             }
         });
@@ -61,7 +74,7 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
     private void setItemData(CommdityBrowsingViewHolder holder, final int position) {
         //设置数据
         holder.mTVTitle.setText(dataList.get(position));
-        holder.mTVPrice.setText("price");
+        holder.mTVPrice.setText("500");
         Picasso.with(context)
                 .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
                 .error(R.drawable.catalogue_shopping_bus)
@@ -70,7 +83,11 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
 
         if (true) {
             holder.mTagView.setVisibility(View.VISIBLE);
-            holder.mTagView.setText("无货");
+            if (position % 3 == 0) {
+                holder.mTagView.setTagType(CatalogueTagView.TYPE_OUT_OF_STOCK);
+            } else {
+                holder.mTagView.setTagType(CatalogueTagView.TYPE_WITH_GIFT);
+            }
         } else {
             holder.mTagView.setVisibility(View.GONE);
         }

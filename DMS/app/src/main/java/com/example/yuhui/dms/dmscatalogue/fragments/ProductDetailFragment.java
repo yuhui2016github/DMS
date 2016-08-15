@@ -1,17 +1,20 @@
 package com.example.yuhui.dms.dmscatalogue.fragments;
 
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.dmscatalogue.adapter.ImagePagerAdapter;
 
 /**
  * Created by yuhui on 2016-8-12.
@@ -19,10 +22,14 @@ import com.example.yuhui.dms.R;
 public class ProductDetailFragment extends Fragment implements ViewPager.OnPageChangeListener {
     private ViewPager viewPager;
     private ViewGroup group;
-    private ImageView[] tips;
-    private ImageView[] mImageViews;
     private int[] imgIdArray;
+    ImagePagerAdapter imagePagerAdapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,63 +46,26 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
         imgIdArray = new int[]{R.drawable.pullloading1, R.drawable.pullloading2, R.drawable.pullloading3,
                 R.drawable.pullloading4};
 
-        tips = new ImageView[imgIdArray.length];
-        for (int i = 0; i < tips.length; i++) {
-            ImageView imageView = new ImageView(getContext());
-            imageView.setLayoutParams(new LayoutParams(10, 10));
-            tips[i] = imageView;
-            if (i == 0) {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-            }
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            layoutParams.leftMargin = 5;
-            layoutParams.rightMargin = 5;
-            group.addView(imageView, layoutParams);
-        }
-
-        //将图片装载到数组中
-        mImageViews = new ImageView[imgIdArray.length];
-        for (int i = 0; i < mImageViews.length; i++) {
-            ImageView imageView = new ImageView(getContext());
-            mImageViews[i] = imageView;
-            imageView.setBackgroundResource(imgIdArray[i]);
-        }
-
+        imagePagerAdapter = new ImagePagerAdapter.Builder(getContext())
+                .setImgIdArray(imgIdArray)
+                .setGroup(group)
+                .setLoop(false)
+                .create();
         //设置Adapter
-        viewPager.setAdapter(new MyAdapter());
+        viewPager.setAdapter(imagePagerAdapter);
         //设置监听，主要是设置点点的背景
         viewPager.addOnPageChangeListener(this);
-        //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
-        viewPager.setCurrentItem((mImageViews.length) * 100);
-    }
-
-    /**
-     * 设置选中的tip的背景
-     *
-     * @param selectItems
-     */
-    private void setImageBackground(int selectItems) {
-        for (int i = 0; i < tips.length; i++) {
-            if (i == selectItems) {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-            }
-        }
+        //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左(循环)滑动
+        viewPager.setCurrentItem(imagePagerAdapter.getLoop() ? ((imgIdArray.length) * 100) : 0);
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override
     public void onPageSelected(int position) {
-        setImageBackground(position % mImageViews.length);
+        imagePagerAdapter.setImageBackground(position);
     }
 
     @Override
@@ -103,33 +73,27 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
 
     }
 
-    public class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return Integer.MAX_VALUE;
-        }
-
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(mImageViews[position % mImageViews.length]);
-        }
-
-        /**
-         * 载入图片进去，用当前的position 除以 图片数组长度取余数是关键
-         */
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(mImageViews[position % mImageViews.length], 0);
-            return mImageViews[position % mImageViews.length];
-        }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_product_detail, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.shopping_car:
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_view, new ShoppingCarFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 

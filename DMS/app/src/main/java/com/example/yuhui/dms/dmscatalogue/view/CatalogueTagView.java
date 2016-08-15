@@ -5,16 +5,24 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
+ * 商品浏览列表中，展示图右上角以表示 “无货” “满赠” 等状态信息的TagView
  * Created by Administrator on 2016-5-31.
  */
 public class CatalogueTagView extends ImageView {
+    public static final int TYPE_WITH_GIFT = 1001;
+    public static final int TYPE_OUT_OF_STOCK = 1002;
     private static final int ROTATE_DEGREES = 45;
     private String text = "text";
     private Path mPath;
@@ -64,15 +72,36 @@ public class CatalogueTagView extends ImageView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawPath(mPath, mPaint);
         canvas.rotate(ROTATE_DEGREES);
         canvas.drawText(text, (mLength2 - mLength1) / 1.5f, -mLength1 / 2.2f, mTextPaint);
     }
 
+    public void setTagType(@TagType int type) {
+        switch (type) {
+            case TYPE_WITH_GIFT:
+                mPaint.setColor(0xffff7f24);
+                this.text = "满赠";
+                break;
+            case TYPE_OUT_OF_STOCK:
+                mPaint.setColor(0xffaaadb3);
+                this.text = "无货";
+                break;
+            default:
+                break;
+        }
+        invalidate();
+    }
+
     public void setText(String str) {
         this.text = str;
         invalidate();
+    }
+
+    @IntDef({TYPE_WITH_GIFT, TYPE_OUT_OF_STOCK})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface TagType {
     }
 }

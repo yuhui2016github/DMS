@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/item_iv_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="187dp"
+            android:layout_height="130dp"
             android:layout_gravity="center_horizontal"
             android:background="@android:color/white" />
 
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:button="@null"
-                android:drawableStart="@drawable/catalogue_item_collection_selection"
+                android:drawableLeft="@drawable/catalogue_item_collection_selection"
                 android:paddingBottom="13dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="8dp" />
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:button="@null"
-                android:drawableStart="@drawable/catalogue_item_shopping_selection"
+                android:drawableLeft="@drawable/catalogue_shopping_bus"
                 android:gravity="center"
                 android:paddingBottom="13dp"
                 android:paddingLeft="8dp"

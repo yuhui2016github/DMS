@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 /**
+ * 商品浏览界面对应的列表
  * Created by yuhui on 2016-8-10.
  */
 public class ProductsBrowsingView extends RecyclerView {

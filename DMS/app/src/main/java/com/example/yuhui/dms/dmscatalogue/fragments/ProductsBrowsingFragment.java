@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 商品目录浏览Fragment
  * Created by yuhui on 2016-8-10.
  */
 public class ProductsBrowsingFragment extends Fragment {
-    private ProductsBrowsingView productsBrowsingView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,10 +32,11 @@ public class ProductsBrowsingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         List<String> dataList = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            dataList.add(i + "");
+            dataList.add("第 " + i
+                    + " 项商品： 国行Apple/苹果iwatch智能手表/国行Apple/苹果iwatch智能手表/");
         }
         ProductsBrowsingAdapter adapter = new ProductsBrowsingAdapter(getActivity(), dataList);
-        productsBrowsingView = (ProductsBrowsingView) view.findViewById(R.id.products_browsing_view);
+        ProductsBrowsingView productsBrowsingView = (ProductsBrowsingView) view.findViewById(R.id.products_browsing_view);
         productsBrowsingView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         adapter.setImageOnclickListener(new ProductsBrowsingAdapter.ProductImageOnclickListener() {
             @Override
