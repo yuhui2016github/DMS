@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120.5dp"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin">
+
+        <CheckBox
+            android:id="@+id/child_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/child_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/product_invalid" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:id="@+id/child_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/product_list_margin_right"
+            android:layout_marginTop="7.5dp"
+            android:singleLine="false" />
+
+        <LinearLayout
+            android:id="@+id/gift_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/child_product_name"
+            android:layout_marginTop="10.5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FF6D05"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="@string/gift"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/gift_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp" />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="9.5dp">
+
+            <TextView
+                android:id="@+id/unit_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/unit_price" />
+
+            <TextView
+                android:id="@+id/pay_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/product_list_margin_right"
+                android:visibility="gone" />
+
+            <com.example.yuhui.dms.dmscatalogue.view.AmountEditView
+                android:id="@+id/amount_editor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/product_list_margin_right" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

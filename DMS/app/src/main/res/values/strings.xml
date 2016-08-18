@@ -3,4 +3,11 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+
+    <!-- 购物车-->
+    <string name="total_price">合计</string>
+    <string name="product_invalid">失效</string>
+    <string name="gift">赠品</string>
+
 </resources>

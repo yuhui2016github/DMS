@@ -107,4 +107,8 @@
     <color name="input_bottom_line_color">#CCCCCC</color>
     <!--商品目录控件使用-->
     <color name="filter_text_color">#4e4e4e</color>
+    <!--购物车-->
+    <color name="left_button_color">#FF9402</color>
+    <color name="right_button_color">#FF6D05</color>
+    <color name="button_disable_color">#FFC59B</color>
 </resources>
