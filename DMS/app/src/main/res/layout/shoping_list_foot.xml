@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/foot_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white">
@@ -27,15 +28,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="合计"
+            android:text="合计:"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/total_price_text"
+            android:id="@+id/tv_price_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="$ 500" />
+            android:text="¥"
+            android:textColor="#f15656"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:textColor="#f15656"
+            android:textSize="18sp" />
     </LinearLayout>
 
 

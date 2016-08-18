@@ -1,6 +1,7 @@
 package com.example.yuhui.dms.dmscatalogue.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
             groupViewHolder.groupSelectBox = (CheckBox) convertView.findViewById(R.id.group_select);
             groupViewHolder.groupTag = (TextView) convertView.findViewById(R.id.group_tag);
             groupViewHolder.supplierName = (TextView) convertView.findViewById(R.id.supplier_name);
-            groupViewHolder.totalPrice = (TextView) convertView.findViewById(R.id.total_price_text);
+            groupViewHolder.totalPrice = (TextView) convertView.findViewById(R.id.tv_group_price);
             convertView.setTag(groupViewHolder);
         } else {
             groupViewHolder = (GroupViewHolder) convertView.getTag();
@@ -114,7 +115,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         } else {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
-        ProductBean productBean = (ProductBean) childMapList.get(groupPosition).get(childPosition);
+        final ProductBean productBean = (ProductBean) childMapList.get(groupPosition).get(childPosition);
         if (productBean.isValid()) {
             childViewHolder.childTag.setVisibility(View.GONE);
         }
@@ -128,6 +129,15 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         childViewHolder.unitPrice.setText(productBean.getUnitPrice());
         childViewHolder.amount.setText("  x " + productBean.getAmount());
         childViewHolder.payType.setText(productBean.getPayType() + "");
+        childViewHolder.amountEditor.setOnAmountChangeListener(new AmountEditView.OnAmountChangeListener() {
+            @Override
+            public void onAmountChanged(int amount) {
+                Log.i("yuhui", "amount" + amount);
+                productBean.setAmount(amount);
+            }
+        });
+        Log.i("yuhui", "group  " + groupPosition + "  child position  " + childPosition
+                + "   productBean.amount " + productBean.getAmount());
         childViewHolder.amountEditor.setAmount(productBean.getAmount());
         return convertView;
     }

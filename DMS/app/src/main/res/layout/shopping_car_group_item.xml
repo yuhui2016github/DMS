@@ -36,7 +36,7 @@
         android:drawablePadding="10dp" />
 
     <TextView
-        android:id="@+id/total_price_text"
+        android:id="@+id/tv_group_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/product_list_margin_right"
-        android:layout_toLeftOf="@id/total_price_text"
+        android:layout_toLeftOf="@id/tv_group_price"
         android:text="合计"
         android:textSize="16sp" />
 

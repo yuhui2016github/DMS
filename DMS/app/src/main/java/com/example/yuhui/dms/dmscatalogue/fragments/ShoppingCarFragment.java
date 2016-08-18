@@ -52,13 +52,14 @@ public class ShoppingCarFragment extends Fragment {
         for (int index = 0; index < groupMapList.size(); index++) {
             shoppingListView.expandGroup(index);
         }
+        shoppingListView.smoothScrollToPosition(0);
     }
 
     private void initData() {
         groupMapList = new ArrayList<>();
         childMapList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            groupMapList.add(new StoreBean(i + "", true, "店铺 " + i + 1));
+            groupMapList.add(new StoreBean(i + "", true, "店铺 " + (i + 1)));
             List innerList = new ArrayList();
             for (int j = 0; j < i + 1 && j < 4; j++) {
                 ProductBean productBean = new ProductBean(j + "", "第 " + i + " 店铺的商品 " + j);

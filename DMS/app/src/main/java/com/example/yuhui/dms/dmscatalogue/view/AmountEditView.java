@@ -1,24 +1,28 @@
 package com.example.yuhui.dms.dmscatalogue.view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
 
 /**
  * Created by yuhui on 2016-8-16.
  */
 public class AmountEditView extends LinearLayout implements View.OnClickListener {
+    private static final String TAG = "AmountEditView";
     private int amount;
-    private ImageView reduceView;
-    private ImageView addView;
+    private ImageButton reduceButton;
+    private ImageButton addButton;
     private EditText amountEditor;
+    private OnAmountChangeListener onAmountChangeListener;
 
     public AmountEditView(Context context) {
         super(context);
@@ -36,30 +40,44 @@ public class AmountEditView extends LinearLayout implements View.OnClickListener
     }
 
     private void initView(Context context) {
-        setOrientation(HORIZONTAL);
-        reduceView = new ImageView(context);
-        reduceView.setImageResource(R.drawable.ic_reduce);
-        reduceView.setLayoutParams(new ViewGroup.LayoutParams(ImageUtils.dip2px(context, 30), ImageUtils.dip2px(context, 30)));
-        reduceView.setOnClickListener(this);
+        LayoutInflater.from(context).inflate(R.layout.amount_view_layout, this);
+        amountEditor = (EditText) findViewById(R.id.etAmount);
+        amountEditor.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+        amountEditor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        addView = new ImageView(context);
-        addView.setImageResource(R.drawable.ic_add);
-        addView.setLayoutParams(new ViewGroup.LayoutParams(ImageUtils.dip2px(context, 30), ImageUtils.dip2px(context, 30)));
-        addView.setOnClickListener(this);
+            }
 
-        amountEditor = new EditText(context);
-        amountEditor.setLayoutParams(new ViewGroup.LayoutParams(ImageUtils.dip2px(context, 55), ImageUtils.dip2px(context, 35)));
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-        addView(reduceView);
-        addView(amountEditor);
-        addView(addView);
-        this.setScaleX(0.8f);
-        this.setScaleY(0.8f);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    amount = Integer.parseInt(s.toString());
+                    if (onAmountChangeListener != null) {
+                        onAmountChangeListener.onAmountChanged(amount);
+                    }
+                }
+            }
+        });
+        addButton = (ImageButton) findViewById(R.id.btnAdd);
+        reduceButton = (ImageButton) findViewById(R.id.btnReduce);
+        addButton.setOnClickListener(this);
+        reduceButton.setOnClickListener(this);
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
         amountEditor.setText(amount + "");
+        if (amount == 1) {
+            reduceButton.setImageResource(R.drawable.ic_reduce_disable);
+        } else {
+            reduceButton.setImageResource(R.drawable.ic_reduce);
+        }
     }
 
     public int getAmount() {
@@ -67,13 +85,38 @@ public class AmountEditView extends LinearLayout implements View.OnClickListener
         return amount;
     }
 
+    public void setOnAmountChangeListener(OnAmountChangeListener onAmountChangeListener) {
+        this.onAmountChangeListener = onAmountChangeListener;
+    }
+
     @Override
     public void onClick(View v) {
-        if (v == reduceView) {
+        if (v == reduceButton) {
+            if (amount <= 1) {
+                return;
+            }
+            if (amount == 2) {
+                reduceButton.setImageResource(R.drawable.ic_reduce_disable);
+            } else {
+                reduceButton.setImageResource(R.drawable.ic_reduce);
+            }
             amount--;
-        } else if (v == addView) {
+        } else if (v == addButton) {
+            if (amount == 1) {
+                reduceButton.setImageResource(R.drawable.ic_reduce);
+            }
             amount++;
         }
+
         amountEditor.setText(amount + "");
+        if (onAmountChangeListener != null)
+
+        {
+            onAmountChangeListener.onAmountChanged(amount);
+        }
+    }
+
+    public interface OnAmountChangeListener {
+        public void onAmountChanged(int amount);
     }
 }
