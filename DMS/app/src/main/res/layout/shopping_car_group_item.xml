@@ -9,10 +9,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin">
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left">
 
         <CheckBox
             android:id="@+id/group_select"
+            style="@style/CustomCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -30,9 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin"
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
         android:layout_toRightOf="@+id/group_start"
         android:drawableLeft="@mipmap/ic_shop"
+        android:textColor="#333333"
+        android:textSize="14sp"
         android:drawablePadding="10dp" />
 
     <TextView

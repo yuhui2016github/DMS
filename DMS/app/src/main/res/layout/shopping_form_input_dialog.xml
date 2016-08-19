@@ -43,8 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_col_white_corner_nor"
-        android:orientation="vertical"
-        android:paddingBottom="19.5dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
@@ -112,7 +111,6 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-
             <com.example.yuhui.dms.dmscatalogue.view.AmountEditView
                 android:id="@+id/amount_editor"
                 android:layout_width="wrap_content"
@@ -121,14 +119,49 @@
                 android:layout_marginRight="@dimen/product_list_margin_right" />
         </RelativeLayout>
 
-        <com.example.yuhui.dms.dmscatalogue.view.TagView
-            android:id="@+id/pay_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="23.5dp"
-            android:overScrollMode="never" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/title_margin"
+            android:layout_marginRight="@dimen/product_list_margin_right"
+            android:layout_marginTop="20dp"
+            android:background="#CCCCCC" />
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="168dp"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/pay_type"
+                    android:textColor="#999999"
+                    android:textSize="15sp" />
+
+                <com.example.yuhui.dms.dmscatalogue.view.TextTagView
+                    android:id="@+id/pay_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16.5dp"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CCCCCC" />
 
     <include
         layout="@layout/shoping_list_foot"

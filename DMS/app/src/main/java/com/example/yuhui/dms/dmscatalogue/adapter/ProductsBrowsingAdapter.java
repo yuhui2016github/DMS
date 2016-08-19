@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
 import com.example.yuhui.dms.dmscatalogue.view.CatalogueTagView;
-import com.example.yuhui.dms.dmscatalogue.view.ShoppingFormInputDialog;
+import com.example.yuhui.dms.dmscatalogue.dialog.ShoppingFormInputDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -59,13 +59,13 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
             drawable = context.getResources()
                     .getDrawable(R.drawable.catalogue_shopping_bus);
         }
+
         holder.mShoppingCheckBox
                 .setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
         holder.mShoppingCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 这一步必须要做,否则不会显示.
                 new ShoppingFormInputDialog.Builder(context).setData(7).show();
             }
         });

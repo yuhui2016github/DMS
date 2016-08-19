@@ -1,6 +1,7 @@
 package com.example.yuhui.dms.dmscatalogue.fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +13,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ScrollView;
 
 import com.example.yuhui.dms.R;
 import com.example.yuhui.dms.dmscatalogue.adapter.ImagePagerAdapter;
+import com.example.yuhui.dms.dmscatalogue.dialog.ShoppingFormInputDialog;
 
 /**
  * Created by yuhui on 2016-8-12.
  */
 public class ProductDetailFragment extends Fragment implements ViewPager.OnPageChangeListener {
-    private ViewPager viewPager;
     private ViewGroup group;
     private int[] imgIdArray;
     ImagePagerAdapter imagePagerAdapter;
@@ -39,8 +42,12 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initViews(view);
+    }
+
+    private void initViews(View view) {
         group = (ViewGroup) view.findViewById(R.id.view_group);
-        viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
 
         //载入图片资源ID
         imgIdArray = new int[]{R.drawable.pullloading1, R.drawable.pullloading2, R.drawable.pullloading3,
@@ -57,6 +64,24 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
         viewPager.addOnPageChangeListener(this);
         //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左(循环)滑动
         viewPager.setCurrentItem(imagePagerAdapter.getLoop() ? ((imgIdArray.length) * 100) : 0);
+        ScrollView detailScroll = (ScrollView) view.findViewById(R.id.product_detail_scroll);
+        detailScroll.setVerticalScrollBarEnabled(false);
+
+        Drawable drawable = getResources().getDrawable(R.drawable.product_detail_collection_selection);
+        CheckBox collect = (CheckBox) view.findViewById(R.id.checkbox_collection);
+        drawable.setBounds(0, 0, 60, 60);
+        collect.setCompoundDrawables(null, drawable, null, null);
+
+        drawable = getResources().getDrawable(R.drawable.product_detail_shopping_selection);
+        CheckBox addToShoppingCar = (CheckBox) view.findViewById(R.id.checkbox_add_shoppingcar);
+        drawable.setBounds(0, 0, 60, 60);
+        addToShoppingCar.setCompoundDrawables(null, drawable, null, null);
+        addToShoppingCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ShoppingFormInputDialog.Builder(getContext()).setData(80).show();
+            }
+        });
     }
 
     @Override

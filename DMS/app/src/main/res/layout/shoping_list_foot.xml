@@ -8,11 +8,13 @@
 
     <CheckBox
         android:id="@+id/select_all"
+        style="@style/CustomCheckboxTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin"
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
+        android:paddingLeft="10dp"
         android:text="全选"
         android:textSize="16sp" />
 
@@ -22,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin"
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
         android:visibility="gone">
 
         <TextView
@@ -51,13 +53,14 @@
 
 
     <Button
-        android:id="@+id/text_right"
+        android:id="@+id/button_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@drawable/right_button_style"
         android:clickable="true"
-        android:padding="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:text="right button"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
@@ -66,10 +69,11 @@
         android:id="@+id/button_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/text_right"
+        android:layout_toLeftOf="@id/button_right"
         android:background="@drawable/left_button_style"
         android:clickable="true"
-        android:padding="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:text="left button"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />

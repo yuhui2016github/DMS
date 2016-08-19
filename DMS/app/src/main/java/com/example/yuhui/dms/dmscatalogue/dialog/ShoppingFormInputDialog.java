@@ -1,4 +1,4 @@
-package com.example.yuhui.dms.dmscatalogue.view;
+package com.example.yuhui.dms.dmscatalogue.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,12 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
 import com.example.yuhui.dms.dmscatalogue.adapter.TagViewAdapter;
+import com.example.yuhui.dms.dmscatalogue.transformation.CornerTransformation;
+import com.example.yuhui.dms.dmscatalogue.view.TextTagView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,8 +33,8 @@ public class ShoppingFormInputDialog extends Dialog {
     List dataList;
 
     public static class Builder {
-        public final Context context;
-        public int data;
+        private final Context context;
+        private int data;
 
         public Builder(Context context) {
             this.context = context;
@@ -73,20 +77,34 @@ public class ShoppingFormInputDialog extends Dialog {
         ImageView productImage = (ImageView) rootView.findViewById(R.id.product_image);
         Picasso.with(context)
                 // TODO: 2016-8-18
-                .load("todo")
+                .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
                 .error(R.drawable.default_test_image)
                 .resize(ImageUtils.dip2px(context, 64), ImageUtils.dip2px(context, 64))
+                .centerCrop()
+                .transform(new CornerTransformation())
                 .into(productImage);
+
+//        Drawable drawable = context.getResources().getDrawable(R.drawable.default_test_image);
+//        Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
+//        productImage.setImageBitmap(ImageUtils.getRoundedCornerBitmap(bitmap, 30f));
+
         View selectAll = rootView.findViewById(R.id.select_all);
         selectAll.setVisibility(View.GONE);
         View totalPriceLayout = rootView.findViewById(R.id.total_price_layout);
         totalPriceLayout.setVisibility(View.VISIBLE);
         totalPrice = (TextView) rootView.findViewById(R.id.tv_total_price);
         totalPrice.setText("500");
-        TagView payTypeTagView = (TagView) rootView.findViewById(R.id.pay_type);
+        TextTagView payTypeTextTagView = (TextTagView) rootView.findViewById(R.id.pay_type);
         TagViewAdapter tagViewAdapter = new TagViewAdapter(context, dataList);
-        payTypeTagView.setLayoutManager(new GridLayoutManager(context, 2));
-        payTypeTagView.setAdapter(tagViewAdapter);
+        int column = 4;
+        payTypeTextTagView.setLayoutManager(new GridLayoutManager(context, column == 4 ? 2 : 3));
+        payTypeTextTagView.setAdapter(tagViewAdapter);
+        ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scroll_view);
+        scrollView.setVerticalScrollBarEnabled(false);
+        Button leftButton = (Button) rootView.findViewById(R.id.button_left);
+        leftButton.setVisibility(View.GONE);
+        Button rightButton = (Button) rootView.findViewById(R.id.button_right);
+        rightButton.setText(R.string.add_to_shopping_car);
     }
 
 

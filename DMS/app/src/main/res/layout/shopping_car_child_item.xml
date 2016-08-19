@@ -8,12 +8,13 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin">
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left">
 
         <CheckBox
             android:id="@+id/child_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/CustomCheckboxTheme"
             android:layout_gravity="center_vertical" />
 
         <TextView
@@ -28,7 +29,7 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin" />
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/child_product_name"
+            android:layout_marginRight="@dimen/product_list_margin_right"
             android:layout_marginTop="10.5dp"
             android:orientation="horizontal">
 
@@ -106,7 +108,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/product_list_margin_right" />
-
         </RelativeLayout>
     </RelativeLayout>
 

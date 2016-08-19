@@ -3,6 +3,8 @@ package com.example.yuhui.dms.dmscatalogue.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,7 +54,20 @@ public class ShoppingCarFragment extends Fragment {
         for (int index = 0; index < groupMapList.size(); index++) {
             shoppingListView.expandGroup(index);
         }
-        shoppingListView.smoothScrollToPosition(0);
+        shoppingListView.setVerticalScrollBarEnabled(false);
+//        shoppingListView.smoothScrollToPosition(0);
+        Button rightButton = (Button) view.findViewById(R.id.button_right);
+        rightButton.setText(R.string.to_settle_acounts);
+        rightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_view, new OrdersPreviewFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     private void initData() {
