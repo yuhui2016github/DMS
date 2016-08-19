@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
-import com.example.yuhui.dms.dmscatalogue.adapter.TagViewAdapter;
 import com.example.yuhui.dms.dmscatalogue.transformation.CornerTransformation;
 import com.example.yuhui.dms.dmscatalogue.view.TextTagView;
 import com.squareup.picasso.Picasso;
@@ -95,10 +94,10 @@ public class ShoppingFormInputDialog extends Dialog {
         totalPrice = (TextView) rootView.findViewById(R.id.tv_total_price);
         totalPrice.setText("500");
         TextTagView payTypeTextTagView = (TextTagView) rootView.findViewById(R.id.pay_type);
-        TagViewAdapter tagViewAdapter = new TagViewAdapter(context, dataList);
+
         int column = 4;
         payTypeTextTagView.setLayoutManager(new GridLayoutManager(context, column == 4 ? 2 : 3));
-        payTypeTextTagView.setAdapter(tagViewAdapter);
+        payTypeTextTagView.setData(dataList);
         ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scroll_view);
         scrollView.setVerticalScrollBarEnabled(false);
         Button leftButton = (Button) rootView.findViewById(R.id.button_left);
