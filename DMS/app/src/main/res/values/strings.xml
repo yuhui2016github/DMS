@@ -14,6 +14,6 @@
     <string name="add_to_shopping_car">加入购物车</string>
     <string name="to_settle_acounts">去结算</string>
     <!-- 订单 -->
-    <string name="distribution_type">配送方式</string>
+    <string name="distribution_type">配送方式：</string>
 
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextTagView">
+        <attr name="selectedStyle">
+            <enum name="none" value="0" />
+            <enum name="icon" value="1" />
+        </attr>
+        <attr name="textSize" format="dimension" />
+        <attr name="widthSize" format="dimension" />
+        <attr name="heightSize" format="dimension" />
+        <attr name="marginBottom" format="dimension"/>
+        <attr name="marginLeft" format="dimension" />
+        <attr name="marginRight" format="dimension"/>
+    </declare-styleable>
+</resources>

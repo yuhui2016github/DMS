@@ -2,6 +2,8 @@ package com.example.yuhui.dms.dmscatalogue.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
 import com.example.yuhui.dms.dmscatalogue.transformation.CornerTransformation;
 import com.example.yuhui.dms.dmscatalogue.view.TextTagView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class ShoppingFormInputDialog extends Dialog {
     private View rootView;
     TextView totalPrice;
     List dataList;
+
 
     public static class Builder {
         private final Context context;
@@ -73,7 +77,7 @@ public class ShoppingFormInputDialog extends Dialog {
                 dismiss();
             }
         });
-        ImageView productImage = (ImageView) rootView.findViewById(R.id.product_image);
+        final ImageView productImage = (ImageView) rootView.findViewById(R.id.product_image);
         Picasso.with(context)
                 // TODO: 2016-8-18
                 .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
@@ -81,12 +85,19 @@ public class ShoppingFormInputDialog extends Dialog {
                 .resize(ImageUtils.dip2px(context, 64), ImageUtils.dip2px(context, 64))
                 .centerCrop()
                 .transform(new CornerTransformation())
-                .into(productImage);
+                .into(productImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
 
-//        Drawable drawable = context.getResources().getDrawable(R.drawable.default_test_image);
-//        Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
-//        productImage.setImageBitmap(ImageUtils.getRoundedCornerBitmap(bitmap, 30f));
+                    }
 
+                    @Override
+                    public void onError() {
+                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.default_test_image);
+                        Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
+                        productImage.setImageBitmap(ImageUtils.getRoundedCornerBitmap(bitmap, 5f));
+                    }
+                });
         View selectAll = rootView.findViewById(R.id.select_all);
         selectAll.setVisibility(View.GONE);
         View totalPriceLayout = rootView.findViewById(R.id.total_price_layout);

@@ -111,4 +111,7 @@
     <color name="left_button_color">#FF9402</color>
     <color name="right_button_color">#FF6D05</color>
     <color name="button_disable_color">#FFC59B</color>
+    <!--订单预览-->
+    <color name="texttag_border_color">#FFC59B</color>
+    <color name="texttag_text_unselected_color">#3F3F3F</color>
 </resources>

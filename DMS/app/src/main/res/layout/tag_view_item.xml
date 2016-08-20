@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tag_item"
-        android:layout_width="70.5dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="23.5dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="80dp"
         android:gravity="center"
-        android:padding="5dp"
-        android:textSize="18sp" />
+        android:padding="5dp" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/select_icon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignBottom="@id/tag_item"
+        android:layout_alignRight="@id/tag_item"
+        android:src="@drawable/text_tag_selected"
+        android:visibility="gone" />
+
+</RelativeLayout>

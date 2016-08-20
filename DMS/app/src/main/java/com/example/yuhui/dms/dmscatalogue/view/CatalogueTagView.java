@@ -44,7 +44,6 @@ public class CatalogueTagView extends ImageView {
         DisplayMetrics metric = new DisplayMetrics();
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(metric);
-
         mLength1 = (float) (metric.widthPixels / 3 * 0.1);
         mLength2 = (float) (metric.widthPixels / 3 * 0.3);
 
@@ -79,7 +78,7 @@ public class CatalogueTagView extends ImageView {
         canvas.drawText(text, (mLength2 - mLength1) / 1.5f, -mLength1 / 2.2f, mTextPaint);
     }
 
-    public void setTagType(@TagType int type) {
+    public void setTagType(@CatalogueTagType int type) {
         switch (type) {
             case TYPE_WITH_GIFT:
                 mPaint.setColor(0xffff7f24);
@@ -102,6 +101,6 @@ public class CatalogueTagView extends ImageView {
 
     @IntDef({TYPE_WITH_GIFT, TYPE_OUT_OF_STOCK})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface TagType {
+    public @interface CatalogueTagType {
     }
 }
