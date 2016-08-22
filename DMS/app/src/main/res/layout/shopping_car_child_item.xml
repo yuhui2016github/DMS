@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shopping_car_child_item"
     android:layout_width="match_parent"
     android:layout_height="120.5dp"
     android:orientation="horizontal">
 
     <FrameLayout
+        android:id="@+id/left_part"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
@@ -12,9 +14,9 @@
 
         <CheckBox
             android:id="@+id/child_select"
+            style="@style/CustomCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/CustomCheckboxTheme"
             android:layout_gravity="center_vertical" />
 
         <TextView

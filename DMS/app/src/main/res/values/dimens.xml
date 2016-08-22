@@ -5,4 +5,5 @@
     <dimen name="checkbox_horizontal_margin_left">11.5dp</dimen>
     <dimen name="product_list_margin_right">12.5dp</dimen>
     <dimen name="title_margin">17.5dp</dimen>
+    <dimen name="order_margin_left">15dp</dimen>
 </resources>

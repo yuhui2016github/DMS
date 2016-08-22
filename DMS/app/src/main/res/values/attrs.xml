@@ -8,8 +8,8 @@
         <attr name="textSize" format="dimension" />
         <attr name="widthSize" format="dimension" />
         <attr name="heightSize" format="dimension" />
-        <attr name="marginBottom" format="dimension"/>
+        <attr name="marginBottom" format="dimension" />
         <attr name="marginLeft" format="dimension" />
-        <attr name="marginRight" format="dimension"/>
+        <attr name="marginRight" format="dimension" />
     </declare-styleable>
 </resources>

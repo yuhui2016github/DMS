@@ -1,9 +1,7 @@
 package com.example.yuhui.dms.dmscatalogue.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.IntDef;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,14 +68,14 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
         this.selectedPosition = selectedPosition;
     }
 
-    public TextTagViewAdapter(Context context, List<String> dataList, int widthSize) {
+    public TextTagViewAdapter(Context context, List<String> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
 
     @Override
     public TextTagViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.tag_view_item, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.text_tag_view_item, parent, false);
         TextTagViewHolder textTagViewHolder = new TextTagViewHolder(itemView);
         return textTagViewHolder;
     }
@@ -95,6 +93,15 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
         lp.setMargins(marginLeft, 0, marginRight, marginBottom);
 
         switch (tagStyle) {
+            case TAG_STYLE_NONE:
+                if (selectedPosition == position) {
+                    textView.setBackground(context.getResources().getDrawable(R.drawable.bg_texttag_none_item));
+                    textView.setTextColor(0xFFFFFFFF);
+                } else {
+                    textView.setBackground(null);
+                    textView.setTextColor(0xFF333333);
+                }
+                break;
             case TAG_STYLE_ICON:
                 if (selectedPosition == position) {
                     textView.setBackground(context.getResources().getDrawable(R.drawable.bg_texttag_icon_selected_item));
@@ -104,15 +111,6 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
                     textView.setBackground(context.getResources().getDrawable(R.drawable.bg_texttag_icon_unselected_item));
                     textView.setTextColor(0xFF3F3F3F);
                     icon.setVisibility(View.GONE);
-                }
-                break;
-            case TAG_STYLE_NONE:
-                if (selectedPosition == position) {
-                    textView.setBackground(context.getResources().getDrawable(R.drawable.bg_texttag_none_item));
-                    textView.setTextColor(0xFFFFFFFF);
-                } else {
-                    textView.setBackground(null);
-                    textView.setTextColor(0xFF333333);
                 }
                 break;
             default:

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#FFC7CCC7" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CCCCCC" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="42.5dp">
+
+        <TextView
+            android:id="@+id/order_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="订单号：12345678"
+            android:textColor="#333333"
+            android:textSize="10pt" />
+
+        <TextView
+            android:id="@+id/review_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="待审核"
+            android:textColor="#FF5800"
+            android:textSize="10pt" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CCCCCC" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/order_margin_left">
+
+        <TextView
+            android:id="@+id/tv_order_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/order_brand"
+            android:textColor="#333333"
+            android:textSize="10pt" />
+
+        <TextView
+            android:id="@+id/tv_order_brand_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_order_brand"
+            android:textColor="#333333"
+            android:textSize="10pt" />
+
+        <TextView
+            android:id="@+id/totoal_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_order_brand"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:text="总金额：3600"
+            android:textColor="#8C8C8C"
+            android:textSize="8pt" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/shopping_car_child_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CCCCCC" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="41dp">
+
+        <TextView
+            android:id="@+id/buy_agian"
+            android:layout_width="82dp"
+            android:layout_height="27dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_texttag_icon_selected_item"
+            android:textColor="#FF5B00"
+            android:gravity="center"
+            android:text="@string/buy_again" />
+
+        <TextView
+            android:id="@+id/modify_order"
+            android:layout_width="82dp"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/buy_agian"
+            android:background="@drawable/bg_texttag_icon_unselected_item"
+            android:gravity="center"
+            android:text="@string/modify_order" />
+
+        <TextView
+            android:id="@+id/cancel_order"
+            android:layout_width="82dp"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/modify_order"
+            android:background="@drawable/bg_texttag_icon_unselected_item"
+            android:gravity="center"
+            android:text="@string/cancel_order" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CCCCCC" />
+
+</LinearLayout>

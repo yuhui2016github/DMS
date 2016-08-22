@@ -64,7 +64,7 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
         viewPager.addOnPageChangeListener(this);
         //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左(循环)滑动
         viewPager.setCurrentItem(imagePagerAdapter.getLoop() ? ((imgIdArray.length) * 100) : 0);
-        ScrollView detailScroll = (ScrollView) view.findViewById(R.id.product_detail_scroll);
+        ScrollView detailScroll = (ScrollView) view.findViewById(R.id.order_preview_scroll);
         detailScroll.setVerticalScrollBarEnabled(false);
 
         Drawable drawable = getResources().getDrawable(R.drawable.product_detail_collection_selection);

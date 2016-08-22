@@ -21,4 +21,13 @@
         android:src="@drawable/text_tag_selected"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/spinner_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/tag_item"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:visibility="gone" />
+
 </RelativeLayout>

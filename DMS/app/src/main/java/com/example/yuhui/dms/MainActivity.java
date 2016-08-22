@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
-import com.example.yuhui.dms.dmscatalogue.fragments.ProductsBrowsingFragment;
+import com.example.yuhui.dms.dmscatalogue.fragments.PurchaseOrderListFragment;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_view, new ProductsBrowsingFragment());
+//        fragmentTransaction.add(R.id.fragment_view, new ProductsBrowsingFragment());
+        fragmentTransaction.add(R.id.fragment_view, new PurchaseOrderListFragment());
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
     }
@@ -37,6 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

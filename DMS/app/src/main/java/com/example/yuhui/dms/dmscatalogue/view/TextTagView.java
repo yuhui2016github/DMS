@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
@@ -43,6 +42,7 @@ public class TextTagView extends RecyclerView {
     public TextTagView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(context, attrs);
+        setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -57,7 +57,7 @@ public class TextTagView extends RecyclerView {
     }
 
     public void setData(List dataList) {
-        textTagViewAdapter = new TextTagViewAdapter(getContext(), dataList, widthSize);
+        textTagViewAdapter = new TextTagViewAdapter(getContext(), dataList);
         textTagViewAdapter.setWidthSize(widthSize);
         textTagViewAdapter.setMarginBottom(marginBottom);
         textTagViewAdapter.setMarginLeft(marginLeft);
