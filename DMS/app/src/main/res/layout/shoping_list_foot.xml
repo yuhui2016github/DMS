@@ -16,7 +16,9 @@
         android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
         android:paddingLeft="10dp"
         android:text="全选"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:checked="true"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/total_price_layout"
@@ -24,8 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
-        android:visibility="gone">
+        android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left">
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,16 +40,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="¥"
-            android:textColor="#f15656"
-            android:textSize="12sp" />
+            android:textColor="#F15656"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:textColor="#f15656"
-            android:textSize="18sp" />
+            android:textColor="#F15656"
+            android:textSize="18sp"
+            android:text="500"/>
     </LinearLayout>
 
 

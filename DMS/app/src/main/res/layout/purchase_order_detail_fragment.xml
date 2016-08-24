@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/receipt_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/location_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/location_icon" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/location_icon">
+
+            <TextView
+                android:id="@+id/tv_buyer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="李文"
+                android:textColor="#333333"
+                android:textSize="10pt" />
+
+            <TextView
+                android:id="@+id/tv_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_buyer_name"
+                android:layout_marginLeft="26.5dp"
+                android:layout_toRightOf="@id/tv_buyer_name"
+                android:text="13800138000"
+                android:textColor="#333333"
+                android:textSize="10pt" />
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_buyer_name"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:text="广州市天河区体育西路103号维多利广场B塔19层"
+                android:textColor="#8C8C8C"
+                android:textSize="7pt" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="11.5dp"
+            android:src="@drawable/right_arrow" />
+    </RelativeLayout>
+
+    <com.example.yuhui.dms.dmscatalogue.view.MailLineView
+        android:id="@+id/mail_line"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@id/receipt_layout" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/purchase_order_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mail_line"
+        android:layout_marginBottom="49dp" />
+
+    <include
+        layout="@layout/shoping_list_foot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

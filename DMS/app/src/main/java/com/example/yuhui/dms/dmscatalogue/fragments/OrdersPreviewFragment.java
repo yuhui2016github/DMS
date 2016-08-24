@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +23,13 @@ import java.util.List;
  * Created by yuhui on 2016-8-19.
  */
 public class OrdersPreviewFragment extends Fragment {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,6 +39,7 @@ public class OrdersPreviewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(getString(R.string.oreder_preview));
 
         TextTagView distributionType = (TextTagView) view.findViewById(R.id.distribution_type);
         List distributionDataList = new ArrayList<String>();
@@ -38,8 +47,6 @@ public class OrdersPreviewFragment extends Fragment {
         distributionDataList.add("自提");
         distributionType.setLayoutManager(new GridLayoutManager(getContext(), 2));
         distributionType.setData(distributionDataList);
-
-
         List productImageList = new ArrayList<Integer>(Arrays.asList(R.drawable.pullloading1,
                 R.drawable.pullloading2, R.drawable.pullloading3, R.drawable.pullloading4,
                 R.drawable.pullloading1, R.drawable.pullloading2, R.drawable.pullloading3));
@@ -51,5 +58,17 @@ public class OrdersPreviewFragment extends Fragment {
                 = new ProductImagePreviewAdapter(getContext(), productImageList);
         productsPreviewView.setAdapter(productImagePreviewAdapter);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

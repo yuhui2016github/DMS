@@ -12,6 +12,7 @@ public class ProductBean {
     private String unitPrice = "";
     private int amount;
     private int payType;
+    private boolean isChecked = true;
 
     public ProductBean() {
     }
@@ -96,5 +97,11 @@ public class ProductBean {
         this.payType = payType;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
 
+    public void setIsChecked(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
 }

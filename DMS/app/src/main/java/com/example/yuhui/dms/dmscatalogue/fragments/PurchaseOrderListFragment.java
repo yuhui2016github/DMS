@@ -3,6 +3,8 @@ package com.example.yuhui.dms.dmscatalogue.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +38,18 @@ public class PurchaseOrderListFragment extends Fragment {
         PurchaseOrderListAdapter purchaseOrderListAdapter
                 = new PurchaseOrderListAdapter(getContext(), dataList);
         orderList.setLayoutManager(new LinearLayoutManager(getContext()));
+        purchaseOrderListAdapter.setOrderOnclickListener(new PurchaseOrderListAdapter.OrderOnclickListener() {
+            @Override
+            public void onClick(int position, Object data) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                PurchaseOrderDetailFragment purchaseOrderDetailFragment = new PurchaseOrderDetailFragment();
+                purchaseOrderDetailFragment.setData(position);
+                fragmentTransaction.replace(R.id.fragment_view, purchaseOrderDetailFragment);
+                fragmentTransaction.addToBackStack(PurchaseOrderListFragment.class.getName());
+                fragmentTransaction.commit();
+            }
+        });
         orderList.setAdapter(purchaseOrderListAdapter);
     }
 }

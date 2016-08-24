@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.yuhui.dms.R;
 import com.example.yuhui.dms.dmscatalogue.adapter.ShoppingCarListAdapter;
@@ -31,11 +34,20 @@ public class ShoppingCarFragment extends Fragment {
     private Menu menu;
     private ExpandableListView shoppingListView;
     private ShoppingCarListAdapter shoppingCarListAdapter;
-    private List<Object> groupMapList;
-    private List<List<Object>> childMapList;
+    private List<Object> groupList;
+    private List<List<Object>> childList;
     private Button rightButton;
     private Button leftButton;
+    private CheckBox footCheckBox;
+    private LinearLayout totalPriceLayout;
+    private TextView totalPriceTv;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -46,35 +58,81 @@ public class ShoppingCarFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(getString(R.string.shopping_cart));
+
         shoppingListView = (ExpandableListView) view.findViewById(R.id.shopping_list);
         initData();
-        shoppingCarListAdapter = new ShoppingCarListAdapter(getContext(), groupMapList, childMapList);
+        shoppingCarListAdapter = new ShoppingCarListAdapter(getContext(), groupList, childList);
+        shoppingCarListAdapter.setGlobalCheckedChangeListener(new ShoppingCarListAdapter.GlobalCheckedChangeListener() {
+            @Override
+            public void onGlobalCheckedChanged(boolean isChecked) {
+                footCheckBox.setChecked(isChecked);
+            }
+        });
         shoppingListView.setAdapter(shoppingCarListAdapter);
         //expand all groups
-        for (int index = 0; index < groupMapList.size(); index++) {
+        for (int index = 0; index < groupList.size(); index++) {
             shoppingListView.expandGroup(index);
         }
         shoppingListView.setVerticalScrollBarEnabled(false);
 //        shoppingListView.smoothScrollToPosition(0);
-        Button rightButton = (Button) view.findViewById(R.id.button_right);
-        rightButton.setText(R.string.to_settle_acounts);
+
+        initFootView(view);
+
+
+    }
+
+    private void initFootView(View view) {
+        footCheckBox = (CheckBox) view.findViewById(R.id.select_all);
+        footCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isChecked = footCheckBox.isChecked();
+                int groupPosition = 0;
+                for (Object storeBean : groupList) {
+                    ((StoreBean) storeBean).setIsChecked(isChecked);
+                    for (Object productBean : childList.get(groupPosition)) {
+                        ((ProductBean) productBean).setIsChecked(isChecked);
+                    }
+                    groupPosition++;
+                }
+                shoppingCarListAdapter.notifyDataSetChanged();
+            }
+        });
+
+        totalPriceLayout = (LinearLayout) view.findViewById(R.id.total_price_layout);
+        totalPriceTv = (TextView) view.findViewById(R.id.tv_total_price);
+        leftButton = (Button) view.findViewById(R.id.button_left);
+        leftButton.setText(R.string.continue_order_goods);
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_view, new ProductsBrowsingFragment());
+                fragmentTransaction.addToBackStack(ShoppingCarFragment.class.getName());
+                fragmentTransaction.commit();
+            }
+        });
+        rightButton = (Button) view.findViewById(R.id.button_right);
+        rightButton.setText(R.string.settle_acounts);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_view, new OrdersPreviewFragment());
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.addToBackStack(ShoppingCarFragment.class.getName());
                 fragmentTransaction.commit();
             }
         });
     }
 
     private void initData() {
-        groupMapList = new ArrayList<>();
-        childMapList = new ArrayList<>();
+        groupList = new ArrayList<>();
+        childList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            groupMapList.add(new StoreBean(i + "", true, "店铺 " + (i + 1)));
+            groupList.add(new StoreBean(i + "", true, "店铺 " + (i + 1)));
             List innerList = new ArrayList();
             for (int j = 0; j < i + 1 && j < 4; j++) {
                 ProductBean productBean = new ProductBean(j + "", "第 " + i + " 店铺的商品 " + j);
@@ -85,14 +143,8 @@ public class ShoppingCarFragment extends Fragment {
                 productBean.setImageUri("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg");
                 innerList.add(productBean);
             }
-            childMapList.add(innerList);
+            childList.add(innerList);
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -109,11 +161,26 @@ public class ShoppingCarFragment extends Fragment {
             menu.getItem(i).setVisible(true);
         }
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.edit:
                 item.setVisible(false);
+                shoppingCarListAdapter.setSholdShowCheckBox(true);
+                shoppingCarListAdapter.notifyDataSetChanged();
+                footCheckBox.setVisibility(View.VISIBLE);
+                totalPriceLayout.setVisibility(View.GONE);
+                leftButton.setText(getString(R.string.remove_invalid_products));
+                rightButton.setText(getString(R.string.delete));
                 break;
             case R.id.done:
                 item.setVisible(false);
+                shoppingCarListAdapter.setSholdShowCheckBox(false);
+                shoppingCarListAdapter.notifyDataSetChanged();
+                footCheckBox.setVisibility(View.GONE);
+                totalPriceLayout.setVisibility(View.VISIBLE);
+                leftButton.setText(getString(R.string.continue_order_goods));
+                rightButton.setText(getString(R.string.settle_acounts));
                 break;
             default:
                 break;

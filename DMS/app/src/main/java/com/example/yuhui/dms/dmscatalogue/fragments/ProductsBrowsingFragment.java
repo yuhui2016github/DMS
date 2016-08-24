@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +25,14 @@ import java.util.List;
  */
 public class ProductsBrowsingFragment extends Fragment {
 
+    private static final String TAG = "ProductsBrowsingFragment";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.products_browsing_fragment, container, false);
@@ -30,6 +41,7 @@ public class ProductsBrowsingFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(getString(R.string.products_browsing));
         List<String> dataList = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
             dataList.add("第 " + i
@@ -44,10 +56,44 @@ public class ProductsBrowsingFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_view, new ProductDetailFragment());
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.addToBackStack(ProductsBrowsingFragment.class.getName());
                 fragmentTransaction.commit();
             }
         });
         productsBrowsingView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_product_browser_detail, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                int num = getActivity().getSupportFragmentManager().getBackStackEntryCount();
+                if (num > 0) {
+                    getActivity().onBackPressed();
+                } else {
+                    getActivity().finish();
+                }
+                return true;
+            case R.id.shopping_car:
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                if (!fragmentManager.popBackStackImmediate(ShoppingCarFragment.class.getName(),
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE)) {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_view, new ShoppingCarFragment());
+                    fragmentTransaction.addToBackStack(ProductsBrowsingFragment.class.getName());
+                    fragmentTransaction.commit();
+                }
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

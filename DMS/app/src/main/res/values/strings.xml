@@ -4,7 +4,13 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-
+    <!-- 标题-->
+    <string name="products_browsing">商品浏览</string>
+    <string name="products_detail">商品详情</string>
+    <string name="shopping_cart">购物车</string>
+    <string name="purchase_order">采购订单</string>
+    <string name="oreder_preview">订单预览</string>
+    <string name="oreder_modify">订单修改</string>
     <!-- 购物车-->
     <string name="total_price">合计</string>
     <string name="product_invalid">失效</string>
@@ -12,7 +18,10 @@
     <!-- 加入购物车 -->
     <string name="pay_type">支付方式</string>
     <string name="add_to_shopping_car">加入购物车</string>
-    <string name="to_settle_acounts">去结算</string>
+    <string name="continue_order_goods">继续订货</string>
+    <string name="settle_acounts">结算</string>
+    <string name="remove_invalid_products">移除失效商品</string>
+    <string name="delete">删除</string>
     <!-- 订单 -->
     <string name="payment_type">付款方式</string>
     <string name="estimated_delivery_date">预计交货日期</string>

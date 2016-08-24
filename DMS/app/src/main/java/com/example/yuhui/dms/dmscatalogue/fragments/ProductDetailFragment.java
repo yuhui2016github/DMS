@@ -42,6 +42,7 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(getString(R.string.products_detail));
         initViews(view);
     }
 
@@ -72,7 +73,7 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
         drawable.setBounds(0, 0, 60, 60);
         collect.setCompoundDrawables(null, drawable, null, null);
 
-        drawable = getResources().getDrawable(R.drawable.product_detail_shopping_selection);
+        drawable = getResources().getDrawable(R.drawable.catalogue_shopping_bus_button);
         CheckBox addToShoppingCar = (CheckBox) view.findViewById(R.id.checkbox_add_shoppingcar);
         drawable.setBounds(0, 0, 60, 60);
         addToShoppingCar.setCompoundDrawables(null, drawable, null, null);
@@ -100,18 +101,21 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_product_detail, menu);
+        inflater.inflate(R.menu.menu_product_browser_detail, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.shopping_car:
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_view, new ShoppingCarFragment());
-                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.addToBackStack(ProductDetailFragment.class.getName());
                 fragmentTransaction.commit();
                 break;
             default:

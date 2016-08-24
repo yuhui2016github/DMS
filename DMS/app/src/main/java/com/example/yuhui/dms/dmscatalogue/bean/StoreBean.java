@@ -7,6 +7,7 @@ public class StoreBean {
     private String id;
     private boolean isValid;
     private String name;
+    private boolean isChecked = true;
 
     public StoreBean() {
     }
@@ -40,5 +41,13 @@ public class StoreBean {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(boolean isChecked) {
+        this.isChecked = isChecked;
     }
 }

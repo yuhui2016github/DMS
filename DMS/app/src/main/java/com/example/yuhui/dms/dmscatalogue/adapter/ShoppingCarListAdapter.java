@@ -1,7 +1,6 @@
 package com.example.yuhui.dms.dmscatalogue.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,39 +23,62 @@ import java.util.List;
  */
 public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private List<Object> groupMapList;
-    private List<List<Object>> childMapList;
+    private List<Object> groupList;
+    private List<List<Object>> childList;
+    private boolean sholdShowCheckBox;
+    private boolean groupSupressEvent = false;
+    private boolean childSupressEvent = false;
+    private GlobalCheckedChangeListener globalCheckedChangeListener;
+
+
+    public void setGroupList(List<Object> groupList) {
+        this.groupList = groupList;
+        notifyDataSetChanged();
+    }
+
+    public void setChildList(List<List<Object>> childList) {
+        this.childList = childList;
+        notifyDataSetChanged();
+    }
+
+    public void setSholdShowCheckBox(boolean sholdShowCheckBox) {
+        this.sholdShowCheckBox = sholdShowCheckBox;
+    }
+
+    public void setGlobalCheckedChangeListener(GlobalCheckedChangeListener globalCheckedChangeListener) {
+        this.globalCheckedChangeListener = globalCheckedChangeListener;
+    }
 
     public ShoppingCarListAdapter(Context context) {
         this.context = context;
     }
 
-    public ShoppingCarListAdapter(Context context, List<Object> groupMapList, List<List<Object>> childMapList) {
+    public ShoppingCarListAdapter(Context context, List<Object> groupList, List<List<Object>> childList) {
         this.context = context;
-        this.groupMapList = groupMapList;
-        this.childMapList = childMapList;
+        this.groupList = groupList;
+        this.childList = childList;
     }
 
     @Override
     public int getGroupCount() {
-        return groupMapList.size();
+        return groupList.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return childMapList.get(groupPosition).size();
+        return childList.get(groupPosition).size();
     }
 
     //获取当前父item的数据
     @Override
     public Object getGroup(int groupPosition) {
-        return groupMapList.get(groupPosition);
+        return groupList.get(groupPosition);
     }
 
     //得到子item需要关联的数据
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return childMapList.get(groupPosition).get(childPosition);
+        return childList.get(groupPosition).get(childPosition);
     }
 
     @Override
@@ -75,7 +97,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder groupViewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.shopping_car_group_item, parent, false);
@@ -88,16 +110,35 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         } else {
             groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
-        StoreBean storeBean = (StoreBean) groupMapList.get(groupPosition);
+        final StoreBean storeBean = (StoreBean) groupList.get(groupPosition);
         if (storeBean.isValid()) {
             groupViewHolder.groupTag.setVisibility(View.GONE);
         }
+        if (sholdShowCheckBox) {
+            groupViewHolder.groupSelectBox.setVisibility(View.VISIBLE);
+        } else {
+            groupViewHolder.groupSelectBox.setVisibility(View.GONE);
+        }
+        final CheckBox groupCheckBox = groupViewHolder.groupSelectBox;
+        groupCheckBox.setChecked(storeBean.isChecked());
+        groupCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isChecked = groupCheckBox.isChecked();
+                storeBean.setIsChecked(isChecked);
+                for (Object productBean : childList.get(groupPosition)) {
+                    ((ProductBean) productBean).setIsChecked(isChecked);
+                }
+                notifyDataSetChanged();
+                updateGlobalCheckStatus(isChecked);
+            }
+        });
         groupViewHolder.supplierName.setText(storeBean.getName());
         return convertView;
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder childViewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.shopping_car_child_item, parent, false);
@@ -115,10 +156,37 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         } else {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
-        final ProductBean productBean = (ProductBean) childMapList.get(groupPosition).get(childPosition);
+        final ProductBean productBean = (ProductBean) childList.get(groupPosition).get(childPosition);
         if (productBean.isValid()) {
             childViewHolder.childTag.setVisibility(View.GONE);
         }
+        if (sholdShowCheckBox) {
+            childViewHolder.childSelectBox.setVisibility(View.VISIBLE);
+        } else {
+            childViewHolder.childSelectBox.setVisibility(View.GONE);
+        }
+        final CheckBox childCheckBox = childViewHolder.childSelectBox;
+        childCheckBox.setChecked(productBean.isChecked());
+        childCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isChecked = childCheckBox.isChecked();
+                productBean.setIsChecked(isChecked);
+                if (isChecked) {
+                    for (Object productBean : childList.get(groupPosition)) {
+                        if (!((ProductBean) productBean).isChecked()) {
+                            return;
+                        }
+                    }
+                } else {
+                    globalCheckedChangeListener.onGlobalCheckedChanged(isChecked);
+                }
+                ((StoreBean) groupList.get(groupPosition)).setIsChecked(isChecked);
+                notifyDataSetChanged();
+                updateGlobalCheckStatus(isChecked);
+            }
+        });
+
         Picasso.with(context)
                 .load(productBean.getImageUri())
                 .error(R.drawable.catalogue_shopping_bus)
@@ -132,14 +200,23 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         childViewHolder.amountEditor.setOnAmountChangeListener(new AmountEditView.OnAmountChangeListener() {
             @Override
             public void onAmountChanged(int amount) {
-                Log.i("yuhui", "amount" + amount);
                 productBean.setAmount(amount);
             }
         });
-        Log.i("yuhui", "group  " + groupPosition + "  child position  " + childPosition
-                + "   productBean.amount " + productBean.getAmount());
         childViewHolder.amountEditor.setAmount(productBean.getAmount());
         return convertView;
+    }
+
+    private void updateGlobalCheckStatus(boolean isChecked) {
+        //更新footView的checkbox状态
+        if (isChecked) {
+            for (Object storeBean : groupList) {
+                if (!((StoreBean) storeBean).isChecked()) {
+                    return;
+                }
+            }
+        }
+        globalCheckedChangeListener.onGlobalCheckedChanged(isChecked);
     }
 
     @Override
@@ -147,14 +224,8 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    public void setGroupMapList(List<Object> groupMapList) {
-        this.groupMapList = groupMapList;
-        notifyDataSetChanged();
-    }
-
-    public void setChildMapList(List<List<Object>> childMapList) {
-        this.childMapList = childMapList;
-        notifyDataSetChanged();
+    public interface GlobalCheckedChangeListener {
+        public void onGlobalCheckedChanged(boolean isChecked);
     }
 
     class GroupViewHolder {
