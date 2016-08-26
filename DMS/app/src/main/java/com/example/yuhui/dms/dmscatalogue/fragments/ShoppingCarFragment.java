@@ -1,6 +1,7 @@
 package com.example.yuhui.dms.dmscatalogue.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,15 +23,20 @@ import com.example.yuhui.dms.dmscatalogue.adapter.ShoppingCarListAdapter;
 import com.example.yuhui.dms.dmscatalogue.bean.ProductBean;
 import com.example.yuhui.dms.dmscatalogue.bean.StoreBean;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by yuhui on 2016-8-15.
  */
-public class ShoppingCarFragment extends Fragment {
+public class ShoppingCarFragment extends Fragment implements View.OnClickListener {
     private static final int MENU_ITEM_EDIT = 0;
     private static final int MENU_ITEM_DONE = 1;
+    private static final int STATUS_VIEW = 1000;
+    private static final int STATUS_EDIT = 1001;
+    private int status = STATUS_VIEW;
     private Menu menu;
     private ExpandableListView shoppingListView;
     private ShoppingCarListAdapter shoppingCarListAdapter;
@@ -42,6 +48,15 @@ public class ShoppingCarFragment extends Fragment {
     private LinearLayout totalPriceLayout;
     private TextView totalPriceTv;
 
+    @IntDef({STATUS_VIEW, STATUS_EDIT})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface StatusType {
+
+    }
+
+    public void setStatus(@StatusType int status) {
+        this.status = status;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,48 +99,15 @@ public class ShoppingCarFragment extends Fragment {
 
     private void initFootView(View view) {
         footCheckBox = (CheckBox) view.findViewById(R.id.select_all);
-        footCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isChecked = footCheckBox.isChecked();
-                int groupPosition = 0;
-                for (Object storeBean : groupList) {
-                    ((StoreBean) storeBean).setIsChecked(isChecked);
-                    for (Object productBean : childList.get(groupPosition)) {
-                        ((ProductBean) productBean).setIsChecked(isChecked);
-                    }
-                    groupPosition++;
-                }
-                shoppingCarListAdapter.notifyDataSetChanged();
-            }
-        });
-
+        footCheckBox.setOnClickListener(this);
         totalPriceLayout = (LinearLayout) view.findViewById(R.id.total_price_layout);
         totalPriceTv = (TextView) view.findViewById(R.id.tv_total_price);
-        leftButton = (Button) view.findViewById(R.id.button_left);
+        leftButton = (Button) view.findViewById(R.id.btn_left);
         leftButton.setText(R.string.continue_order_goods);
-        leftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_view, new ProductsBrowsingFragment());
-                fragmentTransaction.addToBackStack(ShoppingCarFragment.class.getName());
-                fragmentTransaction.commit();
-            }
-        });
-        rightButton = (Button) view.findViewById(R.id.button_right);
+        leftButton.setOnClickListener(this);
+        rightButton = (Button) view.findViewById(R.id.btn_right);
         rightButton.setText(R.string.settle_acounts);
-        rightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_view, new OrdersPreviewFragment());
-                fragmentTransaction.addToBackStack(ShoppingCarFragment.class.getName());
-                fragmentTransaction.commit();
-            }
-        });
+        rightButton.setOnClickListener(this);
     }
 
     private void initData() {
@@ -133,7 +115,8 @@ public class ShoppingCarFragment extends Fragment {
         childList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             groupList.add(new StoreBean(i + "", true, "店铺 " + (i + 1)));
-            List innerList = new ArrayList();
+            List innerList;
+            innerList = new ArrayList();
             for (int j = 0; j < i + 1 && j < 4; j++) {
                 ProductBean productBean = new ProductBean(j + "", "第 " + i + " 店铺的商品 " + j);
                 productBean.setUnitPrice(60 + "");
@@ -165,8 +148,8 @@ public class ShoppingCarFragment extends Fragment {
                 getActivity().onBackPressed();
                 return true;
             case R.id.edit:
-                item.setVisible(false);
-                shoppingCarListAdapter.setSholdShowCheckBox(true);
+                setStatus(STATUS_EDIT);
+                menu.getItem(MENU_ITEM_EDIT).setVisible(false);
                 shoppingCarListAdapter.notifyDataSetChanged();
                 footCheckBox.setVisibility(View.VISIBLE);
                 totalPriceLayout.setVisibility(View.GONE);
@@ -174,8 +157,8 @@ public class ShoppingCarFragment extends Fragment {
                 rightButton.setText(getString(R.string.delete));
                 break;
             case R.id.done:
-                item.setVisible(false);
-                shoppingCarListAdapter.setSholdShowCheckBox(false);
+                setStatus(STATUS_VIEW);
+                menu.getItem(MENU_ITEM_DONE).setVisible(false);
                 shoppingCarListAdapter.notifyDataSetChanged();
                 footCheckBox.setVisibility(View.GONE);
                 totalPriceLayout.setVisibility(View.VISIBLE);
@@ -186,5 +169,49 @@ public class ShoppingCarFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        switch (v.getId()) {
+            case R.id.btn_left:
+                if (status == STATUS_VIEW) {
+                    fragmentTransaction.replace(R.id.fragment_view, new ProductsBrowsingFragment());
+                    fragmentTransaction.addToBackStack(ShoppingCarFragment.class.getName());
+                    fragmentTransaction.commit();
+                } else if (status == STATUS_EDIT) {
+                    shoppingCarListAdapter.removeInvalidProducts();
+                }
+                break;
+
+            case R.id.btn_right:
+                if (status == STATUS_VIEW) {
+                    fragmentTransaction.replace(R.id.fragment_view, new OrdersPreviewFragment());
+                    fragmentTransaction.addToBackStack(ShoppingCarFragment.class.getName());
+                    fragmentTransaction.commit();
+                } else if (status == STATUS_EDIT) {
+                    shoppingCarListAdapter.removeProducts();
+                }
+                break;
+
+            case R.id.select_all:
+                boolean isChecked = footCheckBox.isChecked();
+                int groupPosition = 0;
+                for (Object storeBean : groupList) {
+                    ((StoreBean) storeBean).setIsChecked(isChecked);
+                    for (Object productBean : childList.get(groupPosition)) {
+                        ((ProductBean) productBean).setIsChecked(isChecked);
+                    }
+                    groupPosition++;
+                }
+                shoppingCarListAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
     }
 }

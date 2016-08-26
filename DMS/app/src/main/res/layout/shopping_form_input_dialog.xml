@@ -127,7 +127,8 @@
             android:layout_marginLeft="@dimen/title_margin"
             android:layout_marginRight="@dimen/product_list_margin_right"
             android:layout_marginTop="20dp"
-            android:background="#CCCCCC" />
+            android:background="#
+            CCCCCC" />
 
         <ScrollView
             android:id="@+id/scroll_view"

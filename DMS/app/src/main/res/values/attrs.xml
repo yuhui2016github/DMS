@@ -12,4 +12,11 @@
         <attr name="marginLeft" format="dimension" />
         <attr name="marginRight" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="PopupTagView">
+        <attr name="popupStyle">
+            <enum name="spinner" value="0" />
+            <enum name="datePicker" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

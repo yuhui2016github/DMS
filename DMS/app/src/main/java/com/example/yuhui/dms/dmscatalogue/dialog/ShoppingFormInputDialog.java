@@ -111,9 +111,9 @@ public class ShoppingFormInputDialog extends Dialog {
         payTypeTextTagView.setData(dataList);
         ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scroll_view);
         scrollView.setVerticalScrollBarEnabled(false);
-        Button leftButton = (Button) rootView.findViewById(R.id.button_left);
+        Button leftButton = (Button) rootView.findViewById(R.id.btn_left);
         leftButton.setVisibility(View.GONE);
-        Button rightButton = (Button) rootView.findViewById(R.id.button_right);
+        Button rightButton = (Button) rootView.findViewById(R.id.btn_right);
         rightButton.setText(R.string.add_to_shopping_car);
     }
 

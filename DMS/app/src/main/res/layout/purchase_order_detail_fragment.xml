@@ -78,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/mail_line"
-        android:layout_marginBottom="49dp" />
+        android:layout_marginBottom="@dimen/list_with_footlayout_margin_bottom" />
 
     <include
         layout="@layout/shoping_list_foot"

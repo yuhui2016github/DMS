@@ -1,6 +1,7 @@
 package com.example.yuhui.dms.dmscatalogue.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -48,7 +49,7 @@ public class ProductsBrowsingFragment extends Fragment {
                     + " 项商品： 国行Apple/苹果iwatch智能手表/国行Apple/苹果iwatch智能手表/");
         }
         ProductsBrowsingAdapter adapter = new ProductsBrowsingAdapter(getActivity(), dataList);
-        ProductsBrowsingView productsBrowsingView = (ProductsBrowsingView) view.findViewById(R.id.products_browsing_view);
+        final ProductsBrowsingView productsBrowsingView = (ProductsBrowsingView) view.findViewById(R.id.products_browsing_view);
         productsBrowsingView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         adapter.setImageOnclickListener(new ProductsBrowsingAdapter.ProductImageOnclickListener() {
             @Override
@@ -61,6 +62,36 @@ public class ProductsBrowsingFragment extends Fragment {
             }
         });
         productsBrowsingView.setAdapter(adapter);
+        productsBrowsingView.setLoadingListener(new ProductsBrowsingView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        productsBrowsingView.refreshComplete();
+                    }
+                }, 2000);
+
+            }
+
+            @Override
+            public void onLoadMore() {
+                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        productsBrowsingView.noMoreLoading();
+//                    }
+//                }, 500);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        productsBrowsingView.stopLoadMore();
+                    }
+                }, 2000);
+            }
+        });
     }
 
     @Override

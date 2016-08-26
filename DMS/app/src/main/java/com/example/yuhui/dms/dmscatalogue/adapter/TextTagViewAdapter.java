@@ -76,8 +76,7 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
     @Override
     public TextTagViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.text_tag_view_item, parent, false);
-        TextTagViewHolder textTagViewHolder = new TextTagViewHolder(itemView);
-        return textTagViewHolder;
+        return new TextTagViewHolder(itemView);
     }
 
     @Override

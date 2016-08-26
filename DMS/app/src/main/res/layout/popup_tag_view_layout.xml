@@ -2,34 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="27dp"
-    android:background="@drawable/bg_popup_tag_item"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
+    android:background="@drawable/bg_popup_tag_item"
     android:focusable="true"
     android:orientation="horizontal">
 
-    <FrameLayout
-        android:id="@+id/text_layout"
+    <TextView
+        android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical">
-
-        <Spinner
-            android:id="@+id/spinner_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@null"
-            android:dropDownVerticalOffset="20dp"
-            android:gravity="center_vertical" />
-
-        <TextView
-            android:id="@+id/text_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:visibility="gone" />
-    </FrameLayout>
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:textColor="#3D4245"
+        android:textSize="16sp" />
 
     <ImageView
         android:layout_width="wrap_content"

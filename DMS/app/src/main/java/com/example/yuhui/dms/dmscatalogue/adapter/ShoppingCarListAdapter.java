@@ -24,8 +24,7 @@ import java.util.List;
 public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<Object> groupList;
-    private List<List<Object>> childList;
-    private boolean sholdShowCheckBox;
+    private List<List<Object>> childList_List;
     private boolean groupSupressEvent = false;
     private boolean childSupressEvent = false;
     private GlobalCheckedChangeListener globalCheckedChangeListener;
@@ -36,13 +35,9 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    public void setChildList(List<List<Object>> childList) {
-        this.childList = childList;
+    public void setChildList_List(List<List<Object>> childList_List) {
+        this.childList_List = childList_List;
         notifyDataSetChanged();
-    }
-
-    public void setSholdShowCheckBox(boolean sholdShowCheckBox) {
-        this.sholdShowCheckBox = sholdShowCheckBox;
     }
 
     public void setGlobalCheckedChangeListener(GlobalCheckedChangeListener globalCheckedChangeListener) {
@@ -53,10 +48,10 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         this.context = context;
     }
 
-    public ShoppingCarListAdapter(Context context, List<Object> groupList, List<List<Object>> childList) {
+    public ShoppingCarListAdapter(Context context, List<Object> groupList, List<List<Object>> childList_List) {
         this.context = context;
         this.groupList = groupList;
-        this.childList = childList;
+        this.childList_List = childList_List;
     }
 
     @Override
@@ -66,7 +61,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return childList.get(groupPosition).size();
+        return childList_List.get(groupPosition).size();
     }
 
     //获取当前父item的数据
@@ -78,7 +73,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
     //得到子item需要关联的数据
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return childList.get(groupPosition).get(childPosition);
+        return childList_List.get(groupPosition).get(childPosition);
     }
 
     @Override
@@ -114,11 +109,6 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         if (storeBean.isValid()) {
             groupViewHolder.groupTag.setVisibility(View.GONE);
         }
-        if (sholdShowCheckBox) {
-            groupViewHolder.groupSelectBox.setVisibility(View.VISIBLE);
-        } else {
-            groupViewHolder.groupSelectBox.setVisibility(View.GONE);
-        }
         final CheckBox groupCheckBox = groupViewHolder.groupSelectBox;
         groupCheckBox.setChecked(storeBean.isChecked());
         groupCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +116,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
             public void onClick(View v) {
                 boolean isChecked = groupCheckBox.isChecked();
                 storeBean.setIsChecked(isChecked);
-                for (Object productBean : childList.get(groupPosition)) {
+                for (Object productBean : childList_List.get(groupPosition)) {
                     ((ProductBean) productBean).setIsChecked(isChecked);
                 }
                 notifyDataSetChanged();
@@ -156,15 +146,11 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         } else {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
-        final ProductBean productBean = (ProductBean) childList.get(groupPosition).get(childPosition);
+        final ProductBean productBean = (ProductBean) childList_List.get(groupPosition).get(childPosition);
         if (productBean.isValid()) {
             childViewHolder.childTag.setVisibility(View.GONE);
         }
-        if (sholdShowCheckBox) {
-            childViewHolder.childSelectBox.setVisibility(View.VISIBLE);
-        } else {
-            childViewHolder.childSelectBox.setVisibility(View.GONE);
-        }
+
         final CheckBox childCheckBox = childViewHolder.childSelectBox;
         childCheckBox.setChecked(productBean.isChecked());
         childCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +159,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
                 boolean isChecked = childCheckBox.isChecked();
                 productBean.setIsChecked(isChecked);
                 if (isChecked) {
-                    for (Object productBean : childList.get(groupPosition)) {
+                    for (Object productBean : childList_List.get(groupPosition)) {
                         if (!((ProductBean) productBean).isChecked()) {
                             return;
                         }
@@ -217,6 +203,49 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
             }
         }
         globalCheckedChangeListener.onGlobalCheckedChanged(isChecked);
+    }
+
+    public void removeProducts() {
+        for (int i = groupList.size() - 1; i >= 0; i--) { //倒过来遍历remove
+            StoreBean storeBean = (StoreBean) groupList.get(i);
+            if (storeBean.isChecked()) {
+                groupList.remove(i);
+                childList_List.remove(i);
+            } else {
+                List childList = childList_List.get(i);
+                for (int j = childList.size() - 1; j >= 0; j--) {
+                    ProductBean productBean = (ProductBean) childList.get(j);
+                    if (productBean.isChecked()) {
+                        childList.remove(j);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+        dealPrice();
+    }
+
+    public void removeInvalidProducts() {
+        for (int i = groupList.size() - 1; i >= 0; i--) { //倒过来遍历remove
+            StoreBean storeBean = (StoreBean) groupList.get(i);
+            if (!storeBean.isValid()) {
+                groupList.remove(i);
+                childList_List.remove(i);
+            } else {
+                List childList = childList_List.get(i);
+                for (int j = childList.size() - 1; j >= 0; j--) {
+                    ProductBean productBean = (ProductBean) childList.get(j);
+                    if (!productBean.isValid()) {
+                        childList.remove(j);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+        dealPrice();
+    }
+
+    private void dealPrice() {
     }
 
     @Override

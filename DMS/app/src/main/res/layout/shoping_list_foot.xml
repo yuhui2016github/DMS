@@ -14,11 +14,11 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
+        android:checked="true"
         android:paddingLeft="10dp"
         android:text="全选"
         android:textSize="16sp"
-        android:checked="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/total_price_layout"
@@ -48,14 +48,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
+            android:text="500"
             android:textColor="#F15656"
-            android:textSize="18sp"
-            android:text="500"/>
+            android:textSize="18sp" />
     </LinearLayout>
 
 
     <Button
-        android:id="@+id/button_right"
+        android:id="@+id/btn_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -68,10 +68,10 @@
         android:textSize="16sp" />
 
     <Button
-        android:id="@+id/button_left"
+        android:id="@+id/btn_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/button_right"
+        android:layout_toLeftOf="@id/btn_right"
         android:background="@drawable/left_button_style"
         android:clickable="true"
         android:paddingLeft="15dp"

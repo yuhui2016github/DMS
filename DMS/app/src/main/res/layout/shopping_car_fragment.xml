@@ -8,9 +8,9 @@
         android:id="@+id/shopping_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/foot_layout"
-        android:groupIndicator="@null"></ExpandableListView>
+        android:layout_alignParentTop="true"
+        android:groupIndicator="@null" />
 
     <include
         layout="@layout/shoping_list_foot"

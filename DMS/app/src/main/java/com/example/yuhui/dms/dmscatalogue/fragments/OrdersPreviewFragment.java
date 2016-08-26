@@ -3,17 +3,16 @@ package com.example.yuhui.dms.dmscatalogue.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.yuhui.dms.R;
-import com.example.yuhui.dms.dmscatalogue.adapter.ProductImagePreviewAdapter;
-import com.example.yuhui.dms.dmscatalogue.view.TextTagView;
+import com.example.yuhui.dms.dmscatalogue.adapter.OrderPreviewListAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +22,8 @@ import java.util.List;
  * Created by yuhui on 2016-8-19.
  */
 public class OrdersPreviewFragment extends Fragment {
+
+    private List<String> dataList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,24 +41,25 @@ public class OrdersPreviewFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(getString(R.string.oreder_preview));
+        initViews(view);
+    }
 
-        TextTagView distributionType = (TextTagView) view.findViewById(R.id.distribution_type);
-        List distributionDataList = new ArrayList<String>();
-        distributionDataList.add("添加商品");
-        distributionDataList.add("自提");
-        distributionType.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        distributionType.setData(distributionDataList);
-        List productImageList = new ArrayList<Integer>(Arrays.asList(R.drawable.pullloading1,
-                R.drawable.pullloading2, R.drawable.pullloading3, R.drawable.pullloading4,
-                R.drawable.pullloading1, R.drawable.pullloading2, R.drawable.pullloading3));
-        RecyclerView productsPreviewView = (RecyclerView) view.findViewById(R.id.products_preview);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        productsPreviewView.setLayoutManager(linearLayoutManager);
-        ProductImagePreviewAdapter productImagePreviewAdapter
-                = new ProductImagePreviewAdapter(getContext(), productImageList);
-        productsPreviewView.setAdapter(productImagePreviewAdapter);
+    private void initViews(View view) {
+        RecyclerView rvOrderPreview = (RecyclerView) view.findViewById(R.id.rv_order_preview);
+        rvOrderPreview.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        dataList = new ArrayList(Arrays.asList("1", "2", "3", "4"));
+        OrderPreviewListAdapter orderPreviewListAdapter
+                = new OrderPreviewListAdapter(getContext(), dataList);
+        rvOrderPreview.setAdapter(orderPreviewListAdapter);
+        Button leftButton = (Button) view.findViewById(R.id.btn_left);
+        leftButton.setVisibility(View.GONE);
+        Button rightButton = (Button) view.findViewById(R.id.btn_right);
+        rightButton.setText(R.string.submit_order
+
+
+        );
+//        rightButton.setOnClickListener(this);
     }
 
     @Override
