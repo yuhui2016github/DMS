@@ -9,8 +9,6 @@ public class StoreBean {
     private String name;
     private boolean isChecked = true;
 
-    public StoreBean() {
-    }
 
     public StoreBean(String id, boolean isValid, String name) {
         this.id = id;

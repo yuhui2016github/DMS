@@ -9,7 +9,7 @@ public class ProductBean {
     private String name;
     private String imageUri = "";
     private String giftDetail = "";
-    private String unitPrice = "";
+    private float unitPrice = 0f;
     private int amount;
     private int payType;
     private boolean isChecked = true;
@@ -22,7 +22,7 @@ public class ProductBean {
         this.name = name;
     }
 
-    public ProductBean(String id, boolean isValid, String name, String imageUri, String giftDetail, String unitPrice, int amount, int payType) {
+    public ProductBean(String id, boolean isValid, String name, String imageUri, String giftDetail, float unitPrice, int amount, int payType) {
         this.id = id;
         this.isValid = isValid;
         this.name = name;
@@ -73,11 +73,11 @@ public class ProductBean {
         this.giftDetail = giftDetail;
     }
 
-    public String getUnitPrice() {
+    public float getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(String unitPrice) {
+    public void setUnitPrice(float unitPrice) {
         this.unitPrice = unitPrice;
     }
 

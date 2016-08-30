@@ -11,12 +11,16 @@ import android.widget.TextView;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.Utils;
+import com.example.yuhui.dms.dmscatalogue.DisplayMode;
 import com.example.yuhui.dms.dmscatalogue.bean.ProductBean;
 import com.example.yuhui.dms.dmscatalogue.bean.StoreBean;
 import com.example.yuhui.dms.dmscatalogue.view.AmountEditView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Created by yuhui on 2016-8-16.
@@ -25,9 +29,10 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<Object> groupList;
     private List<List<Object>> childList_List;
-    private boolean groupSupressEvent = false;
-    private boolean childSupressEvent = false;
     private GlobalCheckedChangeListener globalCheckedChangeListener;
+    private OnProductCheckedChangeListener onProductCheckedChangeListener;
+    //map储存group的ViewHolder，方便childView的AmountEditor可以动态更新groupView
+    private Map<Integer, GroupViewHolder> groupMap;
 
 
     public void setGroupList(List<Object> groupList) {
@@ -40,18 +45,19 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    public void setGlobalCheckedChangeListener(GlobalCheckedChangeListener globalCheckedChangeListener) {
-        this.globalCheckedChangeListener = globalCheckedChangeListener;
+    public void setOnProductCheckedChangeListener(OnProductCheckedChangeListener onProductCheckedChangeListener) {
+        this.onProductCheckedChangeListener = onProductCheckedChangeListener;
     }
 
-    public ShoppingCarListAdapter(Context context) {
-        this.context = context;
+    public void setGlobalCheckedChangeListener(GlobalCheckedChangeListener globalCheckedChangeListener) {
+        this.globalCheckedChangeListener = globalCheckedChangeListener;
     }
 
     public ShoppingCarListAdapter(Context context, List<Object> groupList, List<List<Object>> childList_List) {
         this.context = context;
         this.groupList = groupList;
         this.childList_List = childList_List;
+        groupMap = new WeakHashMap<>();
     }
 
     @Override
@@ -93,7 +99,7 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        GroupViewHolder groupViewHolder = null;
+        GroupViewHolder groupViewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.shopping_car_group_item, parent, false);
             groupViewHolder = new GroupViewHolder();
@@ -109,6 +115,8 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         if (storeBean.isValid()) {
             groupViewHolder.groupTag.setVisibility(View.GONE);
         }
+        float groupTotalPrice = calculateGroupTotalPrice(groupPosition);
+        groupViewHolder.totalPrice.setText(Utils.formatNumber(groupTotalPrice));
         final CheckBox groupCheckBox = groupViewHolder.groupSelectBox;
         groupCheckBox.setChecked(storeBean.isChecked());
         groupCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -124,12 +132,13 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
             }
         });
         groupViewHolder.supplierName.setText(storeBean.getName());
+        groupMap.put(groupPosition, groupViewHolder);
         return convertView;
     }
 
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        ChildViewHolder childViewHolder = null;
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
+        ChildViewHolder childViewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.shopping_car_child_item, parent, false);
             childViewHolder = new ChildViewHolder();
@@ -138,9 +147,9 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
             childViewHolder.productImage = (ImageView) convertView.findViewById(R.id.product_image);
             childViewHolder.productName = (TextView) convertView.findViewById(R.id.child_product_name);
             childViewHolder.giftDetail = (TextView) convertView.findViewById(R.id.gift_detail);
-            childViewHolder.unitPrice = (TextView) convertView.findViewById(R.id.unit_price);
+            childViewHolder.unitPrice = (TextView) convertView.findViewById(R.id.tv_unit_price);
             childViewHolder.amount = (TextView) convertView.findViewById(R.id.amount);
-            childViewHolder.payType = (TextView) convertView.findViewById(R.id.pay_type);
+            childViewHolder.payType = (TextView) convertView.findViewById(R.id.tv_pay_type);
             childViewHolder.amountEditor = (AmountEditView) convertView.findViewById(R.id.amount_editor);
             convertView.setTag(childViewHolder);
         } else {
@@ -161,36 +170,55 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
                 if (isChecked) {
                     for (Object productBean : childList_List.get(groupPosition)) {
                         if (!((ProductBean) productBean).isChecked()) {
+                            notifyDataSetChanged();
                             return;
                         }
                     }
                 } else {
-                    globalCheckedChangeListener.onGlobalCheckedChanged(isChecked);
+                    globalCheckedChangeListener.onGlobalCheckedChanged(false);
                 }
                 ((StoreBean) groupList.get(groupPosition)).setIsChecked(isChecked);
                 notifyDataSetChanged();
                 updateGlobalCheckStatus(isChecked);
             }
         });
-
-        Picasso.with(context)
-                .load(productBean.getImageUri())
-                .error(R.drawable.catalogue_shopping_bus)
-                .resize(ImageUtils.dip2px(context, 100), ImageUtils.dip2px(context, 100))
-                .into(childViewHolder.productImage);
+        if (DisplayMode.isDisplayImage()) {
+            Picasso.with(context)
+                    .load(productBean.getImageUri())
+                    .error(R.drawable.catalogue_shopping_bus)
+                    .resize(ImageUtils.dip2px(context, 100), ImageUtils.dip2px(context, 100))
+                    .into(childViewHolder.productImage);
+        } else {
+            childViewHolder.productImage.setVisibility(View.GONE);
+        }
         childViewHolder.productName.setText(productBean.getName());
         childViewHolder.giftDetail.setText(productBean.getGiftDetail());
-        childViewHolder.unitPrice.setText(productBean.getUnitPrice());
-        childViewHolder.amount.setText("  x " + productBean.getAmount());
+        childViewHolder.unitPrice.setText(productBean.getUnitPrice() + "");
+        childViewHolder.amount.setVisibility(View.GONE);
         childViewHolder.payType.setText(productBean.getPayType() + "");
         childViewHolder.amountEditor.setOnAmountChangeListener(new AmountEditView.OnAmountChangeListener() {
             @Override
             public void onAmountChanged(int amount) {
                 productBean.setAmount(amount);
+                GroupViewHolder groupViewHolder = groupMap.get(groupPosition);
+                float groupTotalPrice = calculateGroupTotalPrice(groupPosition);
+                groupViewHolder.totalPrice.setText(Utils.formatNumber(groupTotalPrice));
+                dealPrice();
             }
         });
         childViewHolder.amountEditor.setAmount(productBean.getAmount());
         return convertView;
+    }
+
+    public float calculateGroupTotalPrice(int groupPosition) {
+        float groupTotalPrice = 0;
+        for (Object child : childList_List.get(groupPosition)) {
+            ProductBean productBean = (ProductBean) child;
+            if (productBean.isChecked()) {
+                groupTotalPrice += productBean.getAmount() * productBean.getUnitPrice();
+            }
+        }
+        return groupTotalPrice;
     }
 
     private void updateGlobalCheckStatus(boolean isChecked) {
@@ -245,7 +273,24 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         dealPrice();
     }
 
-    private void dealPrice() {
+    public void dealPrice() {
+        int totalCount = 0;
+        float totalPrice = 0f;
+        for (int i = 0; i < groupList.size(); i++) {
+            List<Object> childMapList = childList_List.get(i);
+            for (int j = 0; j < childMapList.size(); j++) {
+                ProductBean productBean = (ProductBean) childMapList.get(j);
+                int count = productBean.getAmount();
+                float discountPrice = productBean.getUnitPrice();
+                if (productBean.isChecked()) {
+                    totalCount++;//单品多数量只记1
+                    totalPrice += discountPrice * count;
+                }
+
+            }
+        }
+
+        onProductCheckedChangeListener.onProductCheckedChange(totalCount, totalPrice);
     }
 
     @Override
@@ -253,8 +298,13 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    public interface OnProductCheckedChangeListener {
+        void onProductCheckedChange(int totalCount, float totalPrice);
+    }
+
+
     public interface GlobalCheckedChangeListener {
-        public void onGlobalCheckedChanged(boolean isChecked);
+        void onGlobalCheckedChanged(boolean isChecked);
     }
 
     class GroupViewHolder {

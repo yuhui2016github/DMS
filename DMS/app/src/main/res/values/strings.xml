@@ -16,10 +16,11 @@
     <string name="product_invalid">失效</string>
     <string name="gift">赠品</string>
     <!-- 加入购物车 -->
+    <string name="supplier">供应商:  %s</string>
     <string name="pay_type">支付方式</string>
     <string name="add_to_shopping_car">加入购物车</string>
     <string name="continue_order_goods">继续订货</string>
-    <string name="settle_acounts">结算</string>
+    <string name="settle_acounts">结算(%s)</string>
     <string name="remove_invalid_products">移除失效商品</string>
     <string name="delete">删除</string>
     <!-- 订单 -->

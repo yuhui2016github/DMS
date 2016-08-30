@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.Utils;
 import com.example.yuhui.dms.dmscatalogue.adapter.ShoppingCarListAdapter;
 import com.example.yuhui.dms.dmscatalogue.bean.ProductBean;
 import com.example.yuhui.dms.dmscatalogue.bean.StoreBean;
@@ -31,11 +32,12 @@ import java.util.List;
 /**
  * Created by yuhui on 2016-8-15.
  */
-public class ShoppingCarFragment extends Fragment implements View.OnClickListener {
+public class ShoppingCarFragment extends Fragment implements View.OnClickListener, ShoppingCarListAdapter.OnProductCheckedChangeListener {
     private static final int MENU_ITEM_EDIT = 0;
     private static final int MENU_ITEM_DONE = 1;
     private static final int STATUS_VIEW = 1000;
     private static final int STATUS_EDIT = 1001;
+    private static final String TAG = "ShoppingCarFragment";
     private int status = STATUS_VIEW;
     private Menu menu;
     private ExpandableListView shoppingListView;
@@ -47,6 +49,8 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
     private CheckBox footCheckBox;
     private LinearLayout totalPriceLayout;
     private TextView totalPriceTv;
+    private int mMenuOpenedHeight;//编辑菜单打开时的高度
+    private boolean mIsKeyboardOpened;// 软键盘是否显示
 
     @IntDef({STATUS_VIEW, STATUS_EDIT})
     @Retention(RetentionPolicy.SOURCE)
@@ -74,27 +78,26 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(getString(R.string.shopping_cart));
-
+        initFootView(view);
         shoppingListView = (ExpandableListView) view.findViewById(R.id.shopping_list);
+        shoppingListView.setVerticalScrollBarEnabled(false);
         initData();
         shoppingCarListAdapter = new ShoppingCarListAdapter(getContext(), groupList, childList);
-        shoppingCarListAdapter.setGlobalCheckedChangeListener(new ShoppingCarListAdapter.GlobalCheckedChangeListener() {
-            @Override
-            public void onGlobalCheckedChanged(boolean isChecked) {
-                footCheckBox.setChecked(isChecked);
-            }
-        });
+        shoppingCarListAdapter.setGlobalCheckedChangeListener(
+                new ShoppingCarListAdapter.GlobalCheckedChangeListener() {
+                    @Override
+                    public void onGlobalCheckedChanged(boolean isChecked) {
+                        footCheckBox.setChecked(isChecked);
+                    }
+                });
+        shoppingCarListAdapter.setOnProductCheckedChangeListener(this);
+        shoppingCarListAdapter.dealPrice();
         shoppingListView.setAdapter(shoppingCarListAdapter);
         //expand all groups
         for (int index = 0; index < groupList.size(); index++) {
             shoppingListView.expandGroup(index);
         }
-        shoppingListView.setVerticalScrollBarEnabled(false);
-//        shoppingListView.smoothScrollToPosition(0);
-
-        initFootView(view);
-
-
+        shoppingListView.smoothScrollToPosition(0);
     }
 
     private void initFootView(View view) {
@@ -119,7 +122,7 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
             innerList = new ArrayList();
             for (int j = 0; j < i + 1 && j < 4; j++) {
                 ProductBean productBean = new ProductBean(j + "", "第 " + i + " 店铺的商品 " + j);
-                productBean.setUnitPrice(60 + "");
+                productBean.setUnitPrice(60);
                 productBean.setGiftDetail("康师傅葡萄味饮料250ml*24 2箱");
                 productBean.setAmount(5);
                 productBean.setIsValid(true);
@@ -212,6 +215,14 @@ public class ShoppingCarFragment extends Fragment implements View.OnClickListene
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onProductCheckedChange(int totalCount, float totalPrice) {
+        totalPriceTv.setText(Utils.formatNumber(totalPrice));
+        if (status == STATUS_VIEW) {
+            rightButton.setText(String.format(getString(R.string.settle_acounts),totalCount));
         }
     }
 }

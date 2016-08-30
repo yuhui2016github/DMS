@@ -34,25 +34,40 @@
         android:layout_marginLeft="@dimen/checkbox_horizontal_margin_left"
         android:layout_toRightOf="@+id/group_start"
         android:drawableLeft="@mipmap/ic_shop"
+        android:drawablePadding="10dp"
         android:textColor="#333333"
-        android:textSize="14sp"
-        android:drawablePadding="10dp" />
+        android:textSize="14sp" />
+
 
     <TextView
         android:id="@+id/tv_group_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/product_list_margin_right"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        android:textColor="#F20B0B"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/tv_price_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_group_price"
+        android:layout_toLeftOf="@id/tv_group_price"
+        android:text="¥"
+        android:textColor="#F20B0B"
+        android:textSize="7pt" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/product_list_margin_right"
-        android:layout_toLeftOf="@id/tv_group_price"
-        android:text="合计"
+        android:layout_toLeftOf="@id/tv_price_icon"
+        android:text="合计:"
         android:textSize="16sp" />
+
 
 </RelativeLayout>

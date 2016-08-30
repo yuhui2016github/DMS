@@ -17,7 +17,6 @@ import com.example.yuhui.dms.R;
  * Created by yuhui on 2016-8-16.
  */
 public class AmountEditView extends LinearLayout implements View.OnClickListener {
-    private static final String TAG = "AmountEditView";
     private int amount;
     private ImageButton reduceButton;
     private ImageButton addButton;
@@ -56,10 +55,17 @@ public class AmountEditView extends LinearLayout implements View.OnClickListener
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-                    amount = Integer.parseInt(s.toString());
-                    if (onAmountChangeListener != null) {
-                        onAmountChangeListener.onAmountChanged(amount);
+                if (s != null && !s.equals("")) {
+                    if (s.length() > 0) {
+                        amount = Integer.parseInt(s.toString());
+                        if (amount == 0) {
+                            amount = 1;
+                            callBackAmountChanged();
+                            amountEditor.setText(amount + "");
+                            return;
+                        } else {
+                            callBackAmountChanged();
+                        }
                     }
                 }
             }
@@ -68,6 +74,12 @@ public class AmountEditView extends LinearLayout implements View.OnClickListener
         reduceButton = (ImageButton) findViewById(R.id.btnReduce);
         addButton.setOnClickListener(this);
         reduceButton.setOnClickListener(this);
+    }
+
+    private void callBackAmountChanged() {
+        if (onAmountChangeListener != null) {
+            onAmountChangeListener.onAmountChanged(amount);
+        }
     }
 
     public void setAmount(int amount) {
@@ -102,6 +114,9 @@ public class AmountEditView extends LinearLayout implements View.OnClickListener
             }
             amount--;
         } else if (v == addButton) {
+            if (amount >= 99999) {
+                return;
+            }
             if (amount == 1) {
                 reduceButton.setImageResource(R.drawable.ic_reduce);
             }
@@ -117,6 +132,6 @@ public class AmountEditView extends LinearLayout implements View.OnClickListener
     }
 
     public interface OnAmountChangeListener {
-        public void onAmountChanged(int amount);
+        void onAmountChanged(int amount);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.dmscatalogue.DisplayMode;
 import com.example.yuhui.dms.dmscatalogue.bean.ProductBean;
 import com.example.yuhui.dms.dmscatalogue.view.AmountEditView;
 import com.squareup.picasso.Picasso;
@@ -68,14 +69,18 @@ public class PurchaseOrderListAdapter extends RecyclerView.Adapter<PurchaseOrder
             if (productBean.isValid()) {
                 holder.childTag.setVisibility(View.GONE);
             }
-            Picasso.with(context)
-                    .load(productBean.getImageUri())
-                    .error(R.drawable.catalogue_shopping_bus)
-                    .resize(ImageUtils.dip2px(context, 100), ImageUtils.dip2px(context, 100))
-                    .into(holder.productImage);
+            if (DisplayMode.isDisplayImage()) {
+                Picasso.with(context)
+                        .load(productBean.getImageUri())
+                        .error(R.drawable.catalogue_shopping_bus)
+                        .resize(ImageUtils.dip2px(context, 100), ImageUtils.dip2px(context, 100))
+                        .into(holder.productImage);
+            } else {
+                holder.productImage.setVisibility(View.GONE);
+            }
             holder.productName.setText(productBean.getName());
             holder.giftDetail.setText(productBean.getGiftDetail());
-            holder.unitPrice.setText(productBean.getUnitPrice());
+            holder.unitPrice.setText(productBean.getUnitPrice() + "");
             holder.amount.setText("  x " + productBean.getAmount());
             holder.payType.setText(productBean.getPayType() + "");
             holder.amountEditor.setOnAmountChangeListener(new AmountEditView.OnAmountChangeListener() {
@@ -118,9 +123,9 @@ public class PurchaseOrderListAdapter extends RecyclerView.Adapter<PurchaseOrder
             productImage = (ImageView) itemView.findViewById(R.id.product_image);
             productName = (TextView) itemView.findViewById(R.id.child_product_name);
             giftDetail = (TextView) itemView.findViewById(R.id.gift_detail);
-            unitPrice = (TextView) itemView.findViewById(R.id.unit_price);
+            unitPrice = (TextView) itemView.findViewById(R.id.tv_unit_price);
             amount = (TextView) itemView.findViewById(R.id.amount);
-            payType = (TextView) itemView.findViewById(R.id.pay_type);
+            payType = (TextView) itemView.findViewById(R.id.tv_pay_type);
             amountEditor = (AmountEditView) itemView.findViewById(R.id.amount_editor);
         }
     }

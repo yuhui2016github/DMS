@@ -12,13 +12,17 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.Utils;
+import com.example.yuhui.dms.dmscatalogue.DisplayMode;
 import com.example.yuhui.dms.dmscatalogue.transformation.CornerTransformation;
+import com.example.yuhui.dms.dmscatalogue.view.AmountEditView;
 import com.example.yuhui.dms.dmscatalogue.view.TextTagView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -31,8 +35,10 @@ import java.util.List;
  */
 public class ShoppingFormInputDialog extends Dialog {
     private View rootView;
-    TextView totalPrice;
-    List dataList;
+    private TextView totalPriceView;
+    private List dataList;
+    private float totalPrice;
+    private float unitPrice;
 
 
     public static class Builder {
@@ -70,47 +76,65 @@ public class ShoppingFormInputDialog extends Dialog {
     private void initView(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         rootView = inflater.inflate(R.layout.shopping_form_input_dialog, null);
-        View alphaBackground = rootView.findViewById(R.id.alpha_background);
-        alphaBackground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-        final ImageView productImage = (ImageView) rootView.findViewById(R.id.product_image);
-        Picasso.with(context)
-                // TODO: 2016-8-18
-                .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
-                .error(R.drawable.default_test_image)
-                .resize(ImageUtils.dip2px(context, 64), ImageUtils.dip2px(context, 64))
-                .centerCrop()
-                .transform(new CornerTransformation())
-                .into(productImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
+        FrameLayout imageLayout = (FrameLayout) rootView.findViewById(R.id.image_layout);
+        if (DisplayMode.isDisplayImage()) {
+            View alphaBackground = rootView.findViewById(R.id.alpha_background);
+            alphaBackground.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+            final ImageView productImage = (ImageView) rootView.findViewById(R.id.product_image);
+            Picasso.with(context)
+                    // TODO: 2016-8-18
+                    .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
+                    .error(R.drawable.default_test_image)
+                    .resize(ImageUtils.dip2px(context, 64), ImageUtils.dip2px(context, 64))
+                    .centerCrop()
+                    .transform(new CornerTransformation())
+                    .into(productImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError() {
-                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.default_test_image);
-                        Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
-                        productImage.setImageBitmap(ImageUtils.getRoundedCornerBitmap(bitmap, 5f));
-                    }
-                });
-        View selectAll = rootView.findViewById(R.id.select_all);
+                        @Override
+                        public void onError() {
+                            Drawable drawable = getContext().getResources().getDrawable(R.drawable.default_test_image);
+                            Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
+                            productImage.setImageBitmap(ImageUtils.getRoundedCornerBitmap(bitmap, 5f));
+                        }
+                    });
+        } else {
+            imageLayout.setVisibility(View.GONE);
+        }
+        CheckBox selectAll = (CheckBox) rootView.findViewById(R.id.select_all);
         selectAll.setVisibility(View.GONE);
         View totalPriceLayout = rootView.findViewById(R.id.total_price_layout);
         totalPriceLayout.setVisibility(View.VISIBLE);
-        totalPrice = (TextView) rootView.findViewById(R.id.tv_total_price);
-        totalPrice.setText("500");
-        TextTagView payTypeTextTagView = (TextTagView) rootView.findViewById(R.id.pay_type);
+        totalPriceView = (TextView) rootView.findViewById(R.id.tv_total_price);
+        unitPrice = 50;
+        totalPrice = unitPrice;
+        totalPriceView.setText(Utils.formatNumber(totalPrice));
+        TextView unitPriceView = (TextView) rootView.findViewById(R.id.tv_unit_price);
+        unitPriceView.setText(unitPrice + "");
+        AmountEditView amountEditView = (AmountEditView) rootView.findViewById(R.id.amount_editor);
+        amountEditView.setAmount(1);
+        amountEditView.setOnAmountChangeListener(new AmountEditView.OnAmountChangeListener() {
+            @Override
+            public void onAmountChanged(int amount) {
+                totalPrice = unitPrice * amount;
+                totalPriceView.setText(Utils.formatNumber(totalPrice));
+            }
+        });
+        TextView supplierView = (TextView) rootView.findViewById(R.id.tv_dialog_supplier);
+        supplierView.setText(String.format(context.getString(R.string.supplier), "广州玄武供应商"));
 
+        TextTagView payTypeTextTagView = (TextTagView) rootView.findViewById(R.id.ttv_pay_type);
         int column = 4;
         payTypeTextTagView.setLayoutManager(new GridLayoutManager(context, column == 4 ? 2 : 3));
         payTypeTextTagView.setData(dataList);
-        ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scroll_view);
-        scrollView.setVerticalScrollBarEnabled(false);
         Button leftButton = (Button) rootView.findViewById(R.id.btn_left);
         leftButton.setVisibility(View.GONE);
         Button rightButton = (Button) rootView.findViewById(R.id.btn_right);
@@ -128,8 +152,7 @@ public class ShoppingFormInputDialog extends Dialog {
     }
 
     private void bindDataToViews(int data) {
-        TextView test = (TextView) rootView.findViewById(R.id.tv_unit_price);
-        test.setText(data + "  测试 ");
+
     }
 
     private void setWindowProperty() {

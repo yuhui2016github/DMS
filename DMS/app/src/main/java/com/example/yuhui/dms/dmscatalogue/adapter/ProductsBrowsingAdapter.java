@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.yuhui.dms.ImageUtils;
 import com.example.yuhui.dms.R;
-import com.example.yuhui.dms.dmscatalogue.view.CatalogueTagView;
 import com.example.yuhui.dms.dmscatalogue.dialog.ShoppingFormInputDialog;
+import com.example.yuhui.dms.dmscatalogue.view.CatalogueTagView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,6 +27,7 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
     private View rootView;
     private List<String> dataList;
     private ProductImageOnclickListener imageOnclickListener;
+    private boolean isDispalyImage;
 
     public ProductsBrowsingAdapter(Context context, List<String> dataList) {
         this.context = context;
@@ -35,6 +36,10 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
 
     public void setImageOnclickListener(ProductImageOnclickListener imageOnclickListener) {
         this.imageOnclickListener = imageOnclickListener;
+    }
+
+    public void setIsDispalyImage(boolean isDispalyImage) {
+        this.isDispalyImage = isDispalyImage;
     }
 
     @Override
@@ -73,15 +78,32 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
 
     private void setItemData(CommdityBrowsingViewHolder holder, final int position) {
         //设置数据
+        if (isDispalyImage) {
+            Picasso.with(context)
+                    .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
+                    .error(R.drawable.catalogue_shopping_bus)
+                    .resize(ImageUtils.dip2px(context, 187), ImageUtils.dip2px(context, 130))
+                    .into(holder.mImageView);
+            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageOnclickListener.onClick(position, dataList.get(position));
+                }
+            });
+        } else {
+            holder.mImageView.setVisibility(View.GONE);
+            holder.ProductsBrowsingLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageOnclickListener.onClick(position, dataList.get(position));
+                }
+            });
+        }
+
         holder.mTVTitle.setText(dataList.get(position));
         holder.mTVPrice.setText("500");
-        Picasso.with(context)
-                .load("http://pic25.nipic.com/20121201/11501528_124108168130_2.jpg")
-                .error(R.drawable.catalogue_shopping_bus)
-                .resize(ImageUtils.dip2px(context, 187), ImageUtils.dip2px(context, 130))
-                .into(holder.mImageView);
 
-        if (true) {
+        if (isDispalyImage) {
             holder.mTagView.setVisibility(View.VISIBLE);
             if (position % 3 == 0) {
                 holder.mTagView.setTagType(CatalogueTagView.TYPE_OUT_OF_STOCK);
@@ -91,12 +113,7 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
         } else {
             holder.mTagView.setVisibility(View.GONE);
         }
-        holder.mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageOnclickListener.onClick(position, dataList.get(position));
-            }
-        });
+
     }
 
 
@@ -116,8 +133,8 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
         public TextView mTVPriceIcon;
         public CheckBox mCollectCheckBox;
         public CheckBox mShoppingCheckBox;
-        public RelativeLayout mCatalogueLayout;
         public CatalogueTagView mTagView;
+        public LinearLayout ProductsBrowsingLayout;
 
         public CommdityBrowsingViewHolder(View itemView) {
             super(itemView);
@@ -132,7 +149,7 @@ public class ProductsBrowsingAdapter extends RecyclerView.Adapter<ProductsBrowsi
             mCollectCheckBox = (CheckBox) itemView.findViewById(R.id.item_cb_collection);
             mShoppingCheckBox = (CheckBox) itemView.findViewById(R.id.item_cb_shopping);
             mTagView = (CatalogueTagView) itemView.findViewById(R.id.item_catalogue_tag);
-            mCatalogueLayout = (RelativeLayout) itemView.findViewById(R.id.item_catalogue_layout);
+            ProductsBrowsingLayout = (LinearLayout) itemView.findViewById(R.id.ll_products_browsing);
         }
     }
 

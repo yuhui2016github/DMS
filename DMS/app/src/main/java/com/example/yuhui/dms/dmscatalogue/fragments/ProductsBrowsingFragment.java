@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.dmscatalogue.DisplayMode;
 import com.example.yuhui.dms.dmscatalogue.adapter.ProductsBrowsingAdapter;
+import com.example.yuhui.dms.dmscatalogue.view.DividerItemDecoration;
 import com.example.yuhui.dms.dmscatalogue.view.ProductsBrowsingView;
 
 import java.util.ArrayList;
@@ -48,9 +51,9 @@ public class ProductsBrowsingFragment extends Fragment {
             dataList.add("第 " + i
                     + " 项商品： 国行Apple/苹果iwatch智能手表/国行Apple/苹果iwatch智能手表/");
         }
-        ProductsBrowsingAdapter adapter = new ProductsBrowsingAdapter(getActivity(), dataList);
         final ProductsBrowsingView productsBrowsingView = (ProductsBrowsingView) view.findViewById(R.id.products_browsing_view);
-        productsBrowsingView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        ProductsBrowsingAdapter adapter = new ProductsBrowsingAdapter(getActivity(), dataList);
+        adapter.setIsDispalyImage(DisplayMode.isDisplayImage());
         adapter.setImageOnclickListener(new ProductsBrowsingAdapter.ProductImageOnclickListener() {
             @Override
             public void onClick(int position, Object data) {
@@ -61,6 +64,13 @@ public class ProductsBrowsingFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+        if (DisplayMode.isDisplayImage()) {
+            productsBrowsingView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        } else {
+            productsBrowsingView.setLayoutManager(new LinearLayoutManager(getContext()));
+            productsBrowsingView.addItemDecoration(new DividerItemDecoration(getContext(),
+                                                            DividerItemDecoration.VERTICAL_LIST));
+        }
         productsBrowsingView.setAdapter(adapter);
         productsBrowsingView.setLoadingListener(new ProductsBrowsingView.LoadingListener() {
             @Override

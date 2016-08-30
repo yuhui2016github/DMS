@@ -43,7 +43,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
         List testList = new ArrayList();
         for (int i = 0; i < 4; i++) {
             ProductBean productBean = new ProductBean(i + "", "第 " + i + " 产品 ");
-            productBean.setUnitPrice(60 + "");
+            productBean.setUnitPrice(60);
             productBean.setGiftDetail("康师傅葡萄味饮料250ml*24 2箱");
             productBean.setAmount(5);
             productBean.setIsValid(true);

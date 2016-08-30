@@ -14,9 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 
 import com.example.yuhui.dms.R;
+import com.example.yuhui.dms.dmscatalogue.DisplayMode;
 import com.example.yuhui.dms.dmscatalogue.adapter.ImagePagerAdapter;
 import com.example.yuhui.dms.dmscatalogue.dialog.ShoppingFormInputDialog;
 
@@ -49,24 +51,27 @@ public class ProductDetailFragment extends Fragment implements ViewPager.OnPageC
     private void initViews(View view) {
         group = (ViewGroup) view.findViewById(R.id.view_group);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-
         //载入图片资源ID
         imgIdArray = new int[]{R.drawable.pullloading1, R.drawable.pullloading2, R.drawable.pullloading3,
                 R.drawable.pullloading4};
-
-        imagePagerAdapter = new ImagePagerAdapter.Builder(getContext())
-                .setImgIdArray(imgIdArray)
-                .setGroup(group)
-                .setLoop(false)
-                .create();
-        //设置Adapter
-        viewPager.setAdapter(imagePagerAdapter);
-        //设置监听，主要是设置点点的背景
-        viewPager.addOnPageChangeListener(this);
-        //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左(循环)滑动
-        viewPager.setCurrentItem(imagePagerAdapter.getLoop() ? ((imgIdArray.length) * 100) : 0);
-        ScrollView detailScroll = (ScrollView) view.findViewById(R.id.order_preview_scroll);
-        detailScroll.setVerticalScrollBarEnabled(false);
+        if (DisplayMode.isDisplayImage()) {
+            imagePagerAdapter = new ImagePagerAdapter.Builder(getContext())
+                    .setImgIdArray(imgIdArray)
+                    .setGroup(group)
+                    .setLoop(false)
+                    .create();
+            //设置Adapter
+            viewPager.setAdapter(imagePagerAdapter);
+            //设置监听，主要是设置点点的背景
+            viewPager.addOnPageChangeListener(this);
+            //设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左(循环)滑动
+            viewPager.setCurrentItem(imagePagerAdapter.getLoop() ? ((imgIdArray.length) * 100) : 0);
+            ScrollView detailScroll = (ScrollView) view.findViewById(R.id.order_preview_scroll);
+            detailScroll.setVerticalScrollBarEnabled(false);
+        } else {
+            FrameLayout imageLayout = (FrameLayout) view.findViewById(R.id.image_layout);
+            imageLayout.setVisibility(View.GONE);
+        }
 
         Drawable drawable = getResources().getDrawable(R.drawable.product_detail_collection_selection);
         CheckBox collect = (CheckBox) view.findViewById(R.id.checkbox_collection);

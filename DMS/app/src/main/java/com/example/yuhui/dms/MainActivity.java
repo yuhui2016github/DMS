@@ -7,16 +7,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
+import com.example.yuhui.dms.dmscatalogue.DisplayMode;
 import com.example.yuhui.dms.dmscatalogue.fragments.ProductsBrowsingFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fragmentManager = getSupportFragmentManager();
+        DisplayMode.setIsDisplayImage(true);
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_view, new ProductsBrowsingFragment());
 //        fragmentTransaction.add(R.id.fragment_view, new ShoppingCarFragment());
@@ -24,10 +25,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
         initActionBar();
+
     }
 
     private void initActionBar() {
-        ActionBar actionBar= getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -40,6 +42,5 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
     }
-
 
 }
