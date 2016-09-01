@@ -62,7 +62,7 @@
                     android:textSize="16sp" />
 
                 <com.example.yuhui.dms.dmscatalogue.view.PopupTagView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     custom:popupStyle="spinner" />
@@ -83,7 +83,7 @@
                     android:textSize="16sp" />
 
                 <com.example.yuhui.dms.dmscatalogue.view.PopupTagView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     custom:popupStyle="datePicker" />
@@ -129,10 +129,102 @@
             android:layout_marginBottom="13.5dp"
             android:layout_marginLeft="@dimen/title_margin"
             android:layout_marginTop="13.5dp"
-            android:text="商品名称：美的KFR-35GW/WPAA3\n商品编号：1298907\n商品毛重：10.5kg\n商品产地：中国大陆\n空调类别：壁挂式空调\n商品名称：美的KFR-35GW/WPAA3\n商品编号：1298907\n商品毛重：10.5kg"
+            android:text="联系人：张三\n传真：1298907\n电话：1236987454\n收货地址 广州天河区体育西路维多利B座"
             android:textAlignment="center"
             android:textColor="#666666"
             android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/ll_receipt_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="13.5dp"
+            android:layout_marginLeft="@dimen/title_margin"
+            android:layout_marginTop="13.5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42.5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/contacts"
+                    android:textColor="#3D4245"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textSize="16sp"
+                    android:paddingLeft="5dp"
+                    android:background="@drawable/bg_popup_tag_item" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42.5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/phone_number"
+                    android:textColor="#3D4245"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_popup_tag_item" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42.5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/license_plate"
+                    android:textColor="#3D4245"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_popup_tag_item" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自提地址：广州市天河区维多利B座33楼"
+                android:textColor="#3D4245"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

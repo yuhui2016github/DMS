@@ -202,7 +202,9 @@ public class ShoppingCarListAdapter extends BaseExpandableListAdapter {
                 productBean.setAmount(amount);
                 GroupViewHolder groupViewHolder = groupMap.get(groupPosition);
                 float groupTotalPrice = calculateGroupTotalPrice(groupPosition);
-                groupViewHolder.totalPrice.setText(Utils.formatNumber(groupTotalPrice));
+                if (groupViewHolder != null) {
+                    groupViewHolder.totalPrice.setText(Utils.formatNumber(groupTotalPrice));
+                }
                 dealPrice();
             }
         });

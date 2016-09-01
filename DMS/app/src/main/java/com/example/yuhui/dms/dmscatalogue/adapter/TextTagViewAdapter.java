@@ -38,7 +38,12 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
     private int marginBottom;
     private int marginLeft;
     private int marginRight;
+    private OnSelectedChangedListener onSelectedChangedListener;
 
+
+    public void setOnSelectedChangedListener(OnSelectedChangedListener onSelectedChangedListener) {
+        this.onSelectedChangedListener = onSelectedChangedListener;
+    }
 
     public void setWidthSize(int widthSize) {
         this.widthSize = widthSize;
@@ -66,6 +71,7 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
 
     public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
+        notifyDataSetChanged();
     }
 
     public TextTagViewAdapter(Context context, List<String> dataList) {
@@ -119,8 +125,10 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedPosition = position;
-                notifyDataSetChanged();
+                setSelectedPosition(position);
+                if (onSelectedChangedListener != null) {
+                    onSelectedChangedListener.onSelectedChanged(position);
+                }
             }
         });
     }
@@ -145,5 +153,9 @@ public class TextTagViewAdapter extends RecyclerView.Adapter<TextTagViewAdapter.
             itemSelectedIcon = (ImageView) itemView.findViewById(R.id.select_icon);
             itemLayout = (RelativeLayout) itemView.findViewById(R.id.item_layout);
         }
+    }
+
+    public interface OnSelectedChangedListener {
+        void onSelectedChanged(int position);
     }
 }

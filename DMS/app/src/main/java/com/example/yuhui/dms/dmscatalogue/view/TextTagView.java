@@ -23,6 +23,7 @@ public class TextTagView extends RecyclerView {
     private int marginLeft;
     private int marginRight;
 
+
     public void setTagStyle(int tagStyle) {
         this.tagStyle = tagStyle;
     }
@@ -65,6 +66,18 @@ public class TextTagView extends RecyclerView {
         textTagViewAdapter.setTagStyle(tagStyle);
         textTagViewAdapter.setTextSize(textSize);
         this.setAdapter(textTagViewAdapter);
+    }
+
+    public void setSelectedPosition(int position) {
+        if (textTagViewAdapter != null) {
+            textTagViewAdapter.setSelectedPosition(position);
+        }
+    }
+
+    public void setOnSelectedChangedListener(TextTagViewAdapter.OnSelectedChangedListener onSelectedChangedListener) {
+        if (textTagViewAdapter != null) {
+            textTagViewAdapter.setOnSelectedChangedListener(onSelectedChangedListener);
+        }
     }
 
 }

@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
 import com.example.yuhui.dms.dmscatalogue.DisplayMode;
-import com.example.yuhui.dms.dmscatalogue.fragments.ProductsBrowsingFragment;
+import com.example.yuhui.dms.dmscatalogue.fragments.ShoppingCarFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
         DisplayMode.setIsDisplayImage(true);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_view, new ProductsBrowsingFragment());
-//        fragmentTransaction.add(R.id.fragment_view, new ShoppingCarFragment());
+//        fragmentTransaction.add(R.id.fragment_view, new ProductsBrowsingFragment());
+        fragmentTransaction.add(R.id.fragment_view, new ShoppingCarFragment());
 //        fragmentTransaction.add(R.id.fragment_view, new PurchaseOrderListFragment());
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();

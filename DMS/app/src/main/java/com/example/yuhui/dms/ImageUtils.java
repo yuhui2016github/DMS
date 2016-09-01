@@ -55,7 +55,6 @@ public class ImageUtils {
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
-
         return output;
     }
 }
